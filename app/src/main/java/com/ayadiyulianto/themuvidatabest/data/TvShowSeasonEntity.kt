@@ -5,10 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class TvShowSeasonEntity(
-    var showId: Long,
-    var sessionId: Int,
-    var sessionPremiere: String,
-    var totalEpisode: Int,
-    var sessionOverview: String,
-    var posterURL: String
-    ): Parcelable
+    var airDate: String?,
+    var episodeCount: Int?,
+    var id: Int?,
+    var name: String?,
+    var overview: String?,
+    var posterPath: String?,
+    var seasonNumber: Int?
+): Parcelable

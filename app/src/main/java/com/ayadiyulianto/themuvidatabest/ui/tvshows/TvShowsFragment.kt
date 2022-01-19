@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.databinding.FragmentTvShowsBinding
+import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.ui.main.MainActivity
 
 class TvShowsFragment : Fragment() {
@@ -25,12 +26,10 @@ class TvShowsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        tvShowsViewModel =
-            ViewModelProvider(this)[TvShowsViewModel::class.java]
-
         _binding = FragmentTvShowsBinding.inflate(inflater, container, false)
 
         (activity as MainActivity).setToolbarTitle(getString(R.string.tv_show))
+        tvShowsViewModel = TvShowsViewModel(Injection.provideImdbRepository(requireContext()))
 
         return binding.root
     }
@@ -38,10 +37,12 @@ class TvShowsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val shows = tvShowsViewModel.getTvShows()
-
         val tvShowAdapter = TvShowsAdapter()
-        tvShowAdapter.setTvShow(shows)
+
+        val tvShows = tvShowsViewModel.getDiscoverTvShow()
+        tvShows.observe(viewLifecycleOwner, { shows ->
+            tvShowAdapter.setTvShow(shows)
+        })
 
         with(binding.rvTvshows) {
             layoutManager = LinearLayoutManager(context)

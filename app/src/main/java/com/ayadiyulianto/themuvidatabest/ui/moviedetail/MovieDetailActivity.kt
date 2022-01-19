@@ -3,10 +3,10 @@ package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.MovieEntity
+import com.ayadiyulianto.themuvidatabest.data.MovieDetailEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ActivityMovieDetailBinding
+import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeMinuteToDurationFormat
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
 import com.bumptech.glide.Glide
@@ -18,7 +18,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailBinding
-    private lateinit var movieDetails: MovieEntity
+    private lateinit var movieDetailViewModel: MovieDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,15 +29,16 @@ class MovieDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[MovieDetailViewModel::class.java]
+        movieDetailViewModel = MovieDetailViewModel(Injection.provideImdbRepository(this))
 
         val extras = intent.extras
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
-                viewModel.setSelectedMovie(movieId)
-                movieDetails = viewModel.getMovie()
-                showDetailMovie()
+                val movieDetails = movieDetailViewModel.getMovie(movieId.toString())
+                movieDetails.observe(this, { movie ->
+                    showDetailMovie(movie)
+                })
             }
         }
 
@@ -47,39 +48,39 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_STATE, movieDetails)
-    }
-
-    private fun showDetailMovie() {
-        binding.toolbarLayout.title = movieDetails.title
+    private fun showDetailMovie(movieDetails: MovieDetailEntity) {
+        binding.toolbarLayout.title = movieDetails.title ?: movieDetails.originalTitle
         binding.movieBackdrop.alpha = 0.75F
-        binding.contentMovieDetail.movieTitle.text = movieDetails.title
-        binding.contentMovieDetail.movieSinopsis.text = movieDetails.description
+        binding.contentMovieDetail.movieTitle.text = movieDetails.title ?: movieDetails.originalTitle
+        binding.contentMovieDetail.movieSinopsis.text = movieDetails.overview
         binding.contentMovieDetail.movieReleaseDate.text = changeStringToDateFormat(movieDetails.releaseDate)
-        binding.contentMovieDetail.movieRating.rating = movieDetails.rating.toFloat()/20
-        binding.contentMovieDetail.movieDuration.text = changeMinuteToDurationFormat(movieDetails.duration)
-        binding.contentMovieDetail.movieGenres.text = movieDetails.genre.joinToString(separator = " • ")
+        binding.contentMovieDetail.movieRating.rating = (movieDetails.voteAverage?.toFloat() ?: 0F) /20
+        binding.contentMovieDetail.movieDuration.text = movieDetails.runtime?.let {
+            changeMinuteToDurationFormat(
+                it
+            )
+        }
+        binding.contentMovieDetail.movieGenres.text =
+            movieDetails.genres?.joinToString(separator = " • ") ?: "-"
 
         Glide.with(this)
-            .load(movieDetails.posterURL)
+            .load(movieDetails.posterPath)
             .transform(RoundedCorners(16))
             .apply(
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                     .error(R.drawable.ic_error)
             )
-            .into(binding.contentMovieDetail.moviePoster)
+            .into(binding.contentMovieDetail.moviePoster )
 
         Glide.with(this)
-            .load(movieDetails.backdropURL)
+            .load(movieDetails.backdropPath)
             .apply(
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                     .error(R.drawable.ic_error)
             )
             .into(binding.movieBackdrop)
 
-        setYTPlayer(movieDetails.youtubeVideoId)
+//        setYTPlayer(movieDetails.youtubeVideoId)
     }
 
     private fun setYTPlayer(videoId: String) {
@@ -95,6 +96,5 @@ class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_MOVIE = "extra_movie"
-        const val EXTRA_STATE = "EXTRA_STATE"
     }
 }

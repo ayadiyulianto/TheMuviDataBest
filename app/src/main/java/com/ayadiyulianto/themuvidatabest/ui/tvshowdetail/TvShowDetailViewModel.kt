@@ -1,26 +1,11 @@
 package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ayadiyulianto.themuvidatabest.data.TvShowEntity
-import com.ayadiyulianto.themuvidatabest.util.DataDummy
+import com.ayadiyulianto.themuvidatabest.data.TvShowDetailEntity
+import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
 
-class TvShowDetailViewModel: ViewModel() {
-
-    private var showId: Long = 0L
-
-    fun setSelectedShow(showId: Long) {
-        this.showId = showId
-    }
-
-    fun getShow(): TvShowEntity {
-        lateinit var show: TvShowEntity
-        val showsEntity = DataDummy.generateTvShow()
-        for (showEntity in showsEntity) {
-            if (showEntity.id == showId) {
-                show = showEntity
-            }
-        }
-        return show
-    }
-
+class TvShowDetailViewModel(private val tmdbRepository: TmdbRepository): ViewModel() {
+    fun getTvShow(showId: String): LiveData<TvShowDetailEntity> = tmdbRepository.getTvShowDetail(showId)
+    fun getLoading():LiveData<Boolean> = tmdbRepository.isLoading
 }

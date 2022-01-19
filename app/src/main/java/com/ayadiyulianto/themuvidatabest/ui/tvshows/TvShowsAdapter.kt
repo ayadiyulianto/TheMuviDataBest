@@ -8,6 +8,7 @@ import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.data.TvShowEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ItemMoviesTvshowsBinding
 import com.ayadiyulianto.themuvidatabest.ui.tvshowdetail.TvShowDetailActivity
+import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
@@ -37,11 +38,11 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
     class TvShowViewHolder(private val binding: ItemMoviesTvshowsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(show: TvShowEntity) {
             with(binding) {
-                tvItemTitle.text = show.title
+                tvItemTitle.text = show.name ?: show.originalName
 
-                tvItemDate.text = show.seasonDetails[show.seasonDetails.size -1].sessionPremiere
+                tvItemDate.text = changeStringToDateFormat(show.firstAirDate)
 
-                tvItemRating.rating = show.rating.toFloat()/20
+                tvItemRating.rating = (show.voteAverage?.toFloat() ?: 0F) / 20
 
                 tvItemSynopsis.text = show.overview
 
@@ -52,7 +53,7 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
                 }
 
                 Glide.with(itemView.context)
-                    .load(show.posterURL)
+                    .load(show.posterPath)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                             .error(R.drawable.ic_error))

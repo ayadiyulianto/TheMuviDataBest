@@ -9,12 +9,12 @@ import java.util.*
 object Utils {
 
     @SuppressLint("SimpleDateFormat")
-    fun changeStringToDateFormat(value: String): String{
+    fun changeStringToDateFormat(value: String?): String{
         try {
-            val strDate: String = value
+            val strDate: String? = value
 
             //current date format
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("MM/dd/yyyy")
+            val dateFormat = SimpleDateFormat("MM/dd/yyyy")
             val objDate: Date = dateFormat.parse(strDate)
 
             //Expected date format
@@ -23,7 +23,7 @@ object Utils {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return ""
+        return "-"
     }
 
     fun changeMinuteToDurationFormat(duration: Int): String{

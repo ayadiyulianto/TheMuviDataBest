@@ -41,9 +41,9 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
                 tvItemTitle.text = movie.title
                 tvItemDate.text = Utils.changeStringToDateFormat(movie.releaseDate)
 
-                tvItemRating.rating = movie.rating.toFloat()/20
+                tvItemRating.rating = (movie.voteAverage?.toFloat() ?: 0F) / 20
 
-                tvItemSynopsis.text = movie.description
+                tvItemSynopsis.text = movie.overview
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, MovieDetailActivity::class.java)
@@ -52,7 +52,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
                 }
 
                 Glide.with(itemView.context)
-                    .load(movie.posterURL)
+                    .load(movie.posterPath)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                             .error(R.drawable.ic_error))

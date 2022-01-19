@@ -1,26 +1,11 @@
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ayadiyulianto.themuvidatabest.data.MovieEntity
-import com.ayadiyulianto.themuvidatabest.util.DataDummy
+import com.ayadiyulianto.themuvidatabest.data.MovieDetailEntity
+import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
 
-class MovieDetailViewModel: ViewModel(){
-
-    private var movieId: Long = 0L
-
-    fun setSelectedMovie(movieId: Long) {
-        this.movieId = movieId
-    }
-
-    fun getMovie(): MovieEntity {
-        lateinit var movie: MovieEntity
-        val moviesEntities = DataDummy.generateDummyMovie()
-        for (movieEntity in moviesEntities) {
-            if (movieEntity.id == movieId) {
-                movie = movieEntity
-            }
-        }
-        return movie
-    }
-
+class MovieDetailViewModel(private val tmdbRepository: TmdbRepository): ViewModel(){
+    fun getMovie(movieId: String): LiveData<MovieDetailEntity> = tmdbRepository.getMovieDetail(movieId)
+    fun getLoading(): LiveData<Boolean> = tmdbRepository.isLoading
 }
