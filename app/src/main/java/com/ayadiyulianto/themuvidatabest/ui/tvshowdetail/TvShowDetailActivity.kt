@@ -16,9 +16,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import androidx.recyclerview.widget.DividerItemDecoration
 
-
-
-
 class TvShowDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTvShowDetailBinding
@@ -51,13 +48,8 @@ class TvShowDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_STATE, showDetails)
-    }
-
     private fun showDetailTvShow() {
-        val listOfSeason = showDetails.seasonDetails
+        val listOfSeason = showDetails.seasons
         val seasonAdapter = SeasonsAdapter()
         seasonAdapter.setSeason(listOfSeason)
 
@@ -76,11 +68,11 @@ class TvShowDetailActivity : AppCompatActivity() {
         binding.tvShowBackdrop.alpha = 0.75F
         binding.contentTvShowDetail.tvShowTitle.text = showDetails.title
         binding.contentTvShowDetail.tvShowSinopsis.text = showDetails.overview
-        binding.contentTvShowDetail.tvShowReleaseDate.text = showDetails.seasonDetails[showDetails.seasonDetails.size - 1].sessionPremiere
+        binding.contentTvShowDetail.tvShowReleaseDate.text = showDetails.seasons[showDetails.seasons.size - 1].airDate
         binding.contentTvShowDetail.tvShowRating.rating = showDetails.rating.toFloat()/20
         binding.contentTvShowDetail.tvShowDuration.text =
             Utils.changeMinuteToDurationFormat(showDetails.duration)
-        binding.contentTvShowDetail.tvShowGenres.text = showDetails.genre.joinToString(separator = " • ")
+        binding.contentTvShowDetail.tvShowGenres.text = showDetails.genres.joinToString(separator = " • ")
 
         Glide.with(this)
             .load(showDetails.posterURL)
@@ -115,6 +107,5 @@ class TvShowDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_TV_SHOW = "extra_tv_show"
-        const val EXTRA_STATE = "extra_state"
     }
 }

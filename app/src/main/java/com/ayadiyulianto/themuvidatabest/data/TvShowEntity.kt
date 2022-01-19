@@ -8,10 +8,10 @@ data class TvShowEntity (
     var id: Long,
     var title: String,
     var overview: String,
-    var genre: ArrayList<String>,
+    var genres: ArrayList<String>,
     var rating: Double,
     var duration: Int,
-    var seasonDetails: ArrayList<TvShowSeasonEntity>,
+    var seasons: ArrayList<TvShowSeasonEntity>,
     var backdropURL: String,
     var posterURL: String,
     var youtubeVideoId: String

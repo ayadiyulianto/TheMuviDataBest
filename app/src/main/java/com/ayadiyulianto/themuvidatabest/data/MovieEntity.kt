@@ -9,7 +9,7 @@ data class MovieEntity(
     var title: String,
     var description: String,
     var releaseDate: String,
-    var genre: ArrayList<String>,
+    var genres: ArrayList<String>,
     var duration: Int, //in minutes
     var rating: Double,
     var backdropURL: String,

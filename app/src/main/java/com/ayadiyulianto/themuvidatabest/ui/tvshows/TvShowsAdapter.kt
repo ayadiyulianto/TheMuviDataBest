@@ -39,7 +39,7 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
             with(binding) {
                 tvItemTitle.text = show.title
 
-                tvItemDate.text = show.seasonDetails[show.seasonDetails.size -1].sessionPremiere
+                tvItemDate.text = show.seasons[show.seasons.size -1].airDate
 
                 tvItemRating.rating = show.rating.toFloat()/20
 

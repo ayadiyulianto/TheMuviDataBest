@@ -29,7 +29,7 @@ class MovieDetailViewModelTest {
         assertEquals(dummyMovie.title, movieEntity.title)
         assertEquals(dummyMovie.description, movieEntity.description)
         assertEquals(dummyMovie.releaseDate, movieEntity.releaseDate)
-        assertEquals(dummyMovie.genre, movieEntity.genre)
+        assertEquals(dummyMovie.genres, movieEntity.genres)
         assertEquals(dummyMovie.duration, movieEntity.duration)
         assertEquals(dummyMovie.rating.toString(), movieEntity.rating.toString())
         assertEquals(dummyMovie.backdropURL, movieEntity.backdropURL)

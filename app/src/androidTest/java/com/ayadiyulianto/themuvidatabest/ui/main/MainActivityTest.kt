@@ -97,7 +97,7 @@ class MainActivityTest {
 
         onView(withId(R.id.tvShowReleaseDate)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowReleaseDate)).check(matches(withText(
-            dummyTvShow[0].seasonDetails[dummyTvShow[0].seasonDetails.size -1].sessionPremiere
+            dummyTvShow[0].seasons[dummyTvShow[0].seasons.size -1].airDate
         )))
 
         onView(withId(R.id.tvShowDuration)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
@@ -115,6 +115,6 @@ class MainActivityTest {
         onView(withId(R.id.tvShowBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         onView(withId(R.id.rv_seasons)).check(matches(isDisplayed()))
-        onView(withId(R.id.rv_seasons)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyTvShow[0].seasonDetails.size))
+        onView(withId(R.id.rv_seasons)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyTvShow[0].seasons.size))
     }
 }

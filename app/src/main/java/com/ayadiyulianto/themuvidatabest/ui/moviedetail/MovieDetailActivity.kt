@@ -47,11 +47,6 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelable(EXTRA_STATE, movieDetails)
-    }
-
     private fun showDetailMovie() {
         binding.toolbarLayout.title = movieDetails.title
         binding.movieBackdrop.alpha = 0.75F
@@ -60,7 +55,7 @@ class MovieDetailActivity : AppCompatActivity() {
         binding.contentMovieDetail.movieReleaseDate.text = changeStringToDateFormat(movieDetails.releaseDate)
         binding.contentMovieDetail.movieRating.rating = movieDetails.rating.toFloat()/20
         binding.contentMovieDetail.movieDuration.text = changeMinuteToDurationFormat(movieDetails.duration)
-        binding.contentMovieDetail.movieGenres.text = movieDetails.genre.joinToString(separator = " • ")
+        binding.contentMovieDetail.movieGenres.text = movieDetails.genres.joinToString(separator = " • ")
 
         Glide.with(this)
             .load(movieDetails.posterURL)
@@ -95,6 +90,5 @@ class MovieDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_MOVIE = "extra_movie"
-        const val EXTRA_STATE = "EXTRA_STATE"
     }
 }

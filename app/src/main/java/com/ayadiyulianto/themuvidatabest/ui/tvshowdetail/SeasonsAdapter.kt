@@ -36,10 +36,10 @@ class SeasonsAdapter: RecyclerView.Adapter<SeasonsAdapter.SeasonViewHolder>() {
     class SeasonViewHolder(private val binding: ItemSeasonsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(season: TvShowSeasonEntity) {
             with(binding) {
-                "Season ${season.sessionId}".also { tvItemTitle.text = it }
-                "${changeStringDateToYear(season.sessionPremiere)} | ${season.totalEpisode} Eps.".also { tvItemYear.text = it }
-                "Season ${season.sessionId} premiered on ${season.sessionPremiere}.".also { tvItemPremiere.text = it }
-                season.sessionOverview.also { tvItemDescription.text = it }
+                "Season ${season.seasonNumber}".also { tvItemTitle.text = it }
+                "${changeStringDateToYear(season.airDate)} | ${season.totalEpisode} Eps.".also { tvItemYear.text = it }
+                "Season ${season.seasonNumber} premiered on ${season.airDate}.".also { tvItemPremiere.text = it }
+                season.overview.also { tvItemDescription.text = it }
 
                 Glide.with(itemView.context)
                     .load(season.posterURL)
