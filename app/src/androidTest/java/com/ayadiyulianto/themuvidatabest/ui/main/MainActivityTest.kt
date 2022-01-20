@@ -32,7 +32,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun loadMovie() {
+    fun loadMovies() {
         onView(withId(R.id.container)).perform(swipeUp())
 
         onView(withId(R.id.navigation_movies)).perform(click())
@@ -46,6 +46,10 @@ class MainActivityTest {
 
         onView(withId(R.id.navigation_movies)).perform(click())
         onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        onView(withId(R.id.movieBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.moviePoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         onView(withId(R.id.movieTitle)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieTitle)).check(matches(withText(dummyMovie[0].title)))
@@ -68,14 +72,11 @@ class MainActivityTest {
 
         onView(withId(R.id.movieSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieSinopsis)).check(matches(withText(dummyMovie[0].description)))
-        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.ytPlayerView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.moviePoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.movieBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
     }
 
     @Test
-    fun loadTvShow() {
+    fun loadTvShows() {
         onView(withId(R.id.container)).perform(swipeUp())
 
         onView(withId(R.id.navigation_tvshows)).perform(click())
@@ -89,6 +90,10 @@ class MainActivityTest {
 
         onView(withId(R.id.navigation_tvshows)).perform(click())
         onView(withId(R.id.rv_tvshows)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        onView(withId(R.id.tvShowBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.tvShowPoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         onView(withId(R.id.tvShowTitle)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowTitle)).check(matches(withText(dummyTvShow[0].title)))
@@ -109,12 +114,10 @@ class MainActivityTest {
 
         onView(withId(R.id.tvShowSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowSinopsis)).check(matches(withText(dummyTvShow[0].overview)))
-        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.ytPlayerView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.tvShowPoster)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
-        onView(withId(R.id.tvShowBackdrop)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
         onView(withId(R.id.rv_seasons)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_seasons)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(dummyTvShow[0].seasons.size))
+        
+        onView(withId(R.id.ytPlayerView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
     }
 }
