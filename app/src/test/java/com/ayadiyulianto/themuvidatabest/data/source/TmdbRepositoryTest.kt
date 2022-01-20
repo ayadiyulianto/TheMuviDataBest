@@ -33,7 +33,7 @@ class TmdbRepositoryTest{
     private val tvShowDetail = DataDummy.generateDummyTvShowDetailResponse()[0]
 
     @Test
-    fun getAllMovies() {
+    fun getMovies() {
         runBlocking {
             doAnswer {invocation ->
                 (invocation.arguments[0] as RemoteDataSource.CallbackLoadDiscoverMovie).onMoviesRecieved(listMovieResponses)
@@ -52,7 +52,7 @@ class TmdbRepositoryTest{
     }
 
     @Test
-    fun getAllTvShow() {
+    fun getTvShows() {
         runBlocking {
             doAnswer {invocation ->
                 (invocation.arguments[0] as RemoteDataSource.CallbackLoadDiscoverTvShow).onTvShowRecieved(listTvShowResponses)
@@ -71,7 +71,7 @@ class TmdbRepositoryTest{
     }
 
     @Test
-    fun getMovieDetails() {
+    fun getMovieDetail() {
         runBlocking {
             doAnswer {invocation ->
                 (invocation.arguments[1] as RemoteDataSource.CallbackLoadMovieDetail).onMovieDetailsRecieved(movieDetail)
