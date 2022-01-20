@@ -7,23 +7,54 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
 
 ### Unit Testing
 
+#### TmdbRepositoryTest
+- Memuat List Movie
+  - Memanipulasi data ketika pemanggilan response list movie dengan data dummy
+  - Memastikan metode pemanggilan response list movie terpanggil
+  - Memastikan data List movie tidak null
+  - Memastikan jumlah data List movie sesuai dengan yang diharapkan
+
+- Memuat List Tv Show
+  - Memanipulasi data ketika pemanggilan response list tv show dengan data dummy
+  - Memastikan metode pemanggilan response list tv show terpanggil
+  - Memastikan data List Tv Show tidak null
+  - Memastikan jumlah data List Tv Show sesuai dengan yang diharapkan
+
+- Memuat Detail Movie
+  - Memanipulasi data ketika pemanggilan response detail movie dengan data dummy
+  - Memastikan metode pemanggilan response detail movie terpanggil
+  - Memastikan data response detail movie tidak null
+  - Memastikan Id Movie pada response detail movie sesuai dengan yang diharapkan
+
+- Memuat Detail Tv Show
+  - Memanipulasi data ketika pemanggilan response detail tv show dengan data dummy
+  - Memastikan metode pemanggilan response detail tv show terpanggil
+  - Memastikan data response detail tv show tidak null
+  - Memastikan Id tv show pada response detail tv show sesuai dengan yang diharapkan
+
 #### MovieDetailViewModelTest
 - Memuat Movie
+  - Memanipulasi data ketika pemanggilan data movie di kelas repository.
+  - Memastikan metode di kelas repository terpanggil.
   - Memastikan data movie tidak null
-  - Memastikan jumlah data movie sesuai dengan yang diharapkan
-  
-#### TvShowDetailViewModelTest
-- Memuat Tv Show
-  - Memastikan data Tv Show tidak null
-  - Memastikan jumlah data Tv Show sesuai dengan yang diharapkan
-    
+  - Memastikan data movie sesuai dengan yang diharapkan
+
 #### MoviesViewModelTest
 - Memuat list movie
   - Memastikan data List movie tidak null
   - Memastikan jumlah data List movie sesuai dengan yang diharapkan
 
+#### TvShowDetailViewModelTest
+- Memuat Tv Show
+  - Memanipulasi data ketika pemanggilan data tv show di kelas repository.
+  - Memastikan metode di kelas repository terpanggil.
+  - Memastikan data Tv Show tidak null
+  - Memastikan data Tv Show sesuai dengan yang diharapkan
+
 #### TvShowsViewModelTest
 - Memuat list tv show
+  - Memanipulasi data ketika pemanggilan data list tv show di kelas repository.
+  - Memastikan metode di kelas repository terpanggil.
   - Memastikan data List Tv Show tidak null
   - Memastikan jumlah data List Tv Show sesuai dengan yang diharapkan
 
