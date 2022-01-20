@@ -43,20 +43,20 @@ class RemoteDataSource {
         }
     }
 
-    suspend fun getMovie(movieId: String, callback: CallbackLoadDetailMovie){
+    suspend fun getMovie(movieId: String, callbackDetail: CallbackLoadMovieDetail){
         EspressoIdlingResource.increment()
         ApiConfig.getApiService().getDetailMovie(movieId, API_KEY, language).await().let{
-            movie -> callback.onMovieDetailsRecieved((
+            movie -> callbackDetail.onMovieDetailsRecieved((
                 movie
                 ))
             EspressoIdlingResource.decrement()
         }
     }
 
-    suspend fun getTvShow(showId: String, callback: CallbackLoadDetailTvShow){
+    suspend fun getTvShow(showId: String, callbackDetail: CallbackLoadTvShowDetail){
         EspressoIdlingResource.increment()
         ApiConfig.getApiService().getDetailTvShow(showId, API_KEY, language).await().let{
-            show -> callback.onTvShowDetailsRecieved((
+            show -> callbackDetail.onTvShowDetailsRecieved((
                 show
                 ))
             EspressoIdlingResource.decrement()
@@ -71,11 +71,11 @@ class RemoteDataSource {
         fun onTvShowRecieved(showResponse: List<ResultsItemTvShow>)
     }
 
-    interface CallbackLoadDetailMovie{
+    interface CallbackLoadMovieDetail{
         fun onMovieDetailsRecieved(showResponse: MovieDetailResponse)
     }
 
-    interface CallbackLoadDetailTvShow{
+    interface CallbackLoadTvShowDetail{
         fun onTvShowDetailsRecieved(showResponse: TvShowDetailResponse)
     }
 

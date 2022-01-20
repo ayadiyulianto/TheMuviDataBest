@@ -20,6 +20,7 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
         if (shows == null) return
         this.listTvShows.clear()
         this.listTvShows.addAll(shows)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TvShowViewHolder {
@@ -33,7 +34,6 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
     }
 
     override fun getItemCount(): Int = listTvShows.size
-
 
     class TvShowViewHolder(private val binding: ItemMoviesTvshowsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(show: TvShowEntity) {

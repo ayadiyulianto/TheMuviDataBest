@@ -35,7 +35,7 @@ class MovieDetailActivity : AppCompatActivity() {
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
-                val movieDetails = movieDetailViewModel.getMovie(movieId.toString())
+                val movieDetails = movieDetailViewModel.getMovieDetail(movieId.toString())
                 movieDetails.observe(this, { movie ->
                     showDetailMovie(movie)
                 })

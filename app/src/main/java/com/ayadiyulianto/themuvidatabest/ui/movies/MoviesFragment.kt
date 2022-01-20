@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.databinding.FragmentMoviesBinding
+import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.ui.main.MainActivity
 
 class MoviesFragment : Fragment() {
@@ -25,12 +25,10 @@ class MoviesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        moviesViewModel =
-            ViewModelProvider(this)[MoviesViewModel::class.java]
-
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
 
         (activity as MainActivity).setToolbarTitle(getString(R.string.movie))
+        moviesViewModel = MoviesViewModel(Injection.provideImdbRepository(requireContext()))
 
         return binding.root
     }
@@ -38,10 +36,12 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val movies = moviesViewModel.getMovies()
-
         val movieAdapter = MoviesAdapter()
-        movieAdapter.setMovies(movies)
+
+        val discoverMovies = moviesViewModel.getDiscoverMovies()
+        discoverMovies.observe(viewLifecycleOwner, { movies ->
+            movieAdapter.setMovies(movies)
+        })
 
         with(binding.rvMovies) {
             layoutManager = LinearLayoutManager(context)

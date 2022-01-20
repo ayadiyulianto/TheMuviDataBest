@@ -20,6 +20,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
         if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -33,7 +34,6 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
     }
 
     override fun getItemCount(): Int = listMovies.size
-
 
     class MovieViewHolder(private val binding: ItemMoviesTvshowsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieEntity) {

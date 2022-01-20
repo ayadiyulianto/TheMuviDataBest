@@ -12,20 +12,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
-class TmdbRepository private constructor(private val remoteDataSource: RemoteDataSource): TmdbDataSource {
+class FakeTmdbRepository (private val remoteDataSource: RemoteDataSource): TmdbDataSource {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
-    companion object{
-        @Volatile
-        private var instance: TmdbRepository? = null
-
-        fun getInstance(remoteDataSource: RemoteDataSource): TmdbRepository =
-            instance ?: synchronized(this){
-                instance ?: TmdbRepository(remoteDataSource)
-            }
-    }
 
     override fun getDiscoverMovies(): LiveData<List<MovieEntity>> {
         _isLoading.value = true
@@ -36,14 +26,14 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                     val movies = ArrayList<MovieEntity>()
                     for(response in movieResponse){
                         val movie = MovieEntity(
-                                response.overview,
-                                response.originalTitle,
-                                response.title,
-                                response.posterPath,
-                                response.backdropPath,
-                                response.releaseDate,
-                                response.voteAverage,
-                                response.id
+                            response.overview,
+                            response.originalTitle,
+                            response.title,
+                            response.posterPath,
+                            response.backdropPath,
+                            response.releaseDate,
+                            response.voteAverage,
+                            response.id
                         )
                         movies.add(movie)
                     }
@@ -163,5 +153,4 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
         }
         return showResult
     }
-
 }

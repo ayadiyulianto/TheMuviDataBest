@@ -37,7 +37,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         if (extras != null) {
             val showId = extras.getLong(EXTRA_TV_SHOW)
             if (showId != 0L) {
-                val showDetails = tvShowDetailViewModel.getTvShow(showId.toString())
+                val showDetails = tvShowDetailViewModel.getTvShowDetail(showId.toString())
                 showDetails.observe(this, { tvShow ->
                     showDetailTvShow(tvShow)
                 })

@@ -840,7 +840,7 @@ object DataDummy {
         return shows
     }
 
-    fun generateDummyDetailMovie(): List<MovieDetailEntity> {
+    fun generateDummyMovieDetail(): List<MovieDetailEntity> {
         val detailMovies = ArrayList<MovieDetailEntity>()
 
         detailMovies.add(
@@ -895,7 +895,7 @@ object DataDummy {
         return detailMovies
     }
 
-    fun generateDummyDetailTvShow(): List<TvShowDetailEntity> {
+    fun generateDummyTvShowDetail(): List<TvShowDetailEntity> {
         val detailTvShows = ArrayList<TvShowDetailEntity>()
 
         detailTvShows.add(
