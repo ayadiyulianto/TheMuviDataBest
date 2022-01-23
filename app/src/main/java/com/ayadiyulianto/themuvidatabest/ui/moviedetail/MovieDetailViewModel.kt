@@ -7,5 +7,5 @@ import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
 
 class MovieDetailViewModel(private val tmdbRepository: TmdbRepository): ViewModel(){
     fun getMovieDetail(movieId: String): LiveData<MovieDetailEntity> = tmdbRepository.getMovieDetail(movieId)
-    fun getLoading(): LiveData<Boolean> = tmdbRepository.isLoading
+    fun isLoading(): LiveData<Boolean> = tmdbRepository.isLoading
 }

@@ -16,5 +16,6 @@ data class TvShowDetailEntity(
     val runtime: List<Int?>?,
     val posterPath: String?,
     val releaseDate: String?,
-    val voteAverage: Double?
+    val voteAverage: Double?,
+    val youtubeVideoIds: List<String?>?
 ):Parcelable

@@ -245,7 +245,18 @@ object DataDummy {
                 "Get over here.",
                 false,
                 "https://www.mortalkombatmovie.net",
-                "Released"
+                "Released",
+                VideoResults(
+                    arrayListOf(
+                        VideosItem(
+                            "Official Restricted Trailer",
+                            "jBa_aHwCbC4",
+                            "YouTube",
+                            "Trailer",
+                            "602e8feae86017003d01ea68"
+                        )
+                    )
+                )
             )
         )
 
@@ -458,26 +469,26 @@ object DataDummy {
                 "Miniseries",
                 "/b0WmHGc8LHTdGCVzxRb3IBMur57.jpg",
                 arrayListOf(
-                    GenresItem02(
+                    GenresItem(
                         "Sci-Fi & Fantasy",
                         10765
                     ),
-                    GenresItem02(
+                    GenresItem(
                         "Action & Adventure",
                         10759
                     ),
-                    GenresItem02(
+                    GenresItem(
                         "Drama",
                         18
                     ),
-                    GenresItem02(
+                    GenresItem(
                         "War & Politics",
                         10768
                     ),
                 ),
                 2556.792,
                 arrayListOf(
-                    ProductionCountriesItem02(
+                    ProductionCountriesItem(
                         "US",
                         "United States of America"
                     )
@@ -528,7 +539,7 @@ object DataDummy {
                     "US"
                 ),
                 arrayListOf(
-                    SpokenLanguagesItem02(
+                    SpokenLanguagesItem(
                         "English",
                         "en",
                         "English"
@@ -545,7 +556,18 @@ object DataDummy {
                 false,
                 "2021-04-23",
                 "https://www.disneyplus.com/series/the-falcon-and-the-winter-soldier/4gglDBMx8icA",
-                "Ended"
+                "Ended",
+                VideoResults(
+                    arrayListOf(
+                        VideosItem(
+                            "Final Trailer",
+                            "ojGHE581lsM",
+                            "YouTube",
+                            "Trailer",
+                            "604f7e4d031deb006ae4b1b3"
+                        )
+                    )
+                )
             )
         )
 
@@ -863,33 +885,39 @@ object DataDummy {
                 110,
                 "/6Wdl9N6dL0Hi0T1qJLWSz6gMLbd.jpg",
                 "2021-04-07",
-                7.9
+                7.9,
+                arrayListOf(
+                    "jBa_aHwCbC4"
+                )
             )
         )
 
         detailMovies.add(
             MovieDetailEntity(
-            527774,
-            "Raya and the Last Dragon",
-            "/7prYzufdIOy1KCTZKVWpjBFqqNr.jpg",
-            arrayListOf(
-                "Animation",
-                "Adventure",
-                "Fantasy",
-                "Family",
-                "Action"
-            ),
-            2516,
-            "Long ago, in the fantasy world of Kumandra, humans and dragons lived together in harmony. " +
-                    "But when an evil force threatened the land, the dragons sacrificed themselves to save humanity. " +
-                    "Now, 500 years later, that same evil has returned and it’s up to a lone warrior, Raya, to track " +
-                    "down the legendary last dragon to restore the fractured land and its divided people.",
-            "Raya and the Last Dragon",
-            107,
-            "/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg",
-            "2021-03-03",
-            8.3
-        )
+                527774,
+                "Raya and the Last Dragon",
+                "/7prYzufdIOy1KCTZKVWpjBFqqNr.jpg",
+                arrayListOf(
+                    "Animation",
+                    "Adventure",
+                    "Fantasy",
+                    "Family",
+                    "Action"
+                ),
+                2516,
+                "Long ago, in the fantasy world of Kumandra, humans and dragons lived together in harmony. " +
+                        "But when an evil force threatened the land, the dragons sacrificed themselves to save humanity. " +
+                        "Now, 500 years later, that same evil has returned and it’s up to a lone warrior, Raya, to track " +
+                        "down the legendary last dragon to restore the fractured land and its divided people.",
+                "Raya and the Last Dragon",
+                107,
+                "/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg",
+                "2021-03-03",
+                8.3,
+                arrayListOf(
+                    "3UFWsEY8Hdc"
+                )
+            )
         )
 
         return detailMovies
@@ -929,7 +957,10 @@ object DataDummy {
                 ),
                 "/6kbAMLteGO8yyewYau6bJ683sw7.jpg",
                 "2021-03-19",
-                7.9
+                7.9,
+                arrayListOf(
+                    "ojGHE581lsM"
+                )
             )
         )
 

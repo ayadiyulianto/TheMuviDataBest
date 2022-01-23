@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.ui.movies
+package com.ayadiyulianto.themuvidatabest.ui.main.movies
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData

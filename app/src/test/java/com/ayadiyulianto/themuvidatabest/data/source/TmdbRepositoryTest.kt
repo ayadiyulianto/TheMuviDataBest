@@ -60,7 +60,7 @@ class TmdbRepositoryTest{
             }.`when`(remote).getDiscoverTvShow(any())
         }
 
-        val dataListTvShow = LiveDataTestUtil.getValue(tmdbRepository.getDiscoverTvShow())
+        val dataListTvShow = LiveDataTestUtil.getValue(tmdbRepository.getDiscoverTvShows())
 
         runBlocking {
             verify(remote).getDiscoverTvShow(any())

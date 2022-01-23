@@ -20,13 +20,13 @@ data class TvShowDetailResponse(
 	val backdropPath: String? = null,
 
 	@field:SerializedName("genres")
-	val genres: List<GenresItem02?>? = null,
+	val genres: List<GenresItem?>? = null,
 
 	@field:SerializedName("popularity")
 	val popularity: Double? = null,
 
 	@field:SerializedName("production_countries")
-	val productionCountries: List<ProductionCountriesItem02?>? = null,
+	val productionCountries: List<ProductionCountriesItem?>? = null,
 
 	@field:SerializedName("id")
 	val id: Int? = null,
@@ -62,7 +62,7 @@ data class TvShowDetailResponse(
 	val originCountry: List<String?>? = null,
 
 	@field:SerializedName("spoken_languages")
-	val spokenLanguages: List<SpokenLanguagesItem02?>? = null,
+	val spokenLanguages: List<SpokenLanguagesItem?>? = null,
 
 	@field:SerializedName("original_name")
 	val originalName: String? = null,
@@ -92,19 +92,10 @@ data class TvShowDetailResponse(
 	val homepage: String? = null,
 
 	@field:SerializedName("status")
-	val status: String? = null
-)
+	val status: String? = null,
 
-data class SpokenLanguagesItem02(
-
-	@field:SerializedName("name")
-	val name: String? = null,
-
-	@field:SerializedName("iso_639_1")
-	val iso6391: String? = null,
-
-	@field:SerializedName("english_name")
-	val englishName: String? = null
+	@field:SerializedName("videos")
+	val videos: VideoResults? = null
 )
 
 data class CreatedByItem(
@@ -123,15 +114,6 @@ data class CreatedByItem(
 
 	@field:SerializedName("id")
 	val id: Int? = null
-)
-
-data class ProductionCountriesItem02(
-
-	@field:SerializedName("iso_3166_1")
-	val iso31661: String? = null,
-
-	@field:SerializedName("name")
-	val name: String? = null
 )
 
 data class LastEpisodeToAir(
@@ -180,15 +162,6 @@ data class NetworksItem(
 
 	@field:SerializedName("origin_country")
 	val originCountry: String? = null
-)
-
-data class GenresItem02(
-
-	@field:SerializedName("name")
-	val name: String? = null,
-
-	@field:SerializedName("id")
-	val id: Int? = null
 )
 
 data class SeasonsItem(

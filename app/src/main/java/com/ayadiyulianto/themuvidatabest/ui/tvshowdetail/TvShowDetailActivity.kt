@@ -1,6 +1,7 @@
 package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -44,6 +45,10 @@ class TvShowDetailActivity : AppCompatActivity() {
             }
         }
 
+        tvShowDetailViewModel.isLoading().observe(this, {
+            binding.contentTvShowDetail.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
         binding.fabFavorite.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -71,7 +76,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         binding.contentTvShowDetail.tvShowTitle.text = showDetails.name ?: showDetails.originalName
         binding.contentTvShowDetail.tvShowSinopsis.text = showDetails.overview
         binding.contentTvShowDetail.tvShowReleaseDate.text = changeStringToDateFormat(showDetails.releaseDate)
-        binding.contentTvShowDetail.tvShowRating.rating = (showDetails.voteAverage?.toFloat() ?: 0F) /20
+        binding.contentTvShowDetail.tvShowRating.rating = (showDetails.voteAverage?.toFloat() ?: 0F) /2
         binding.contentTvShowDetail.tvShowDuration.text =
             showDetails.runtime?.get(0)?.let { Utils.changeMinuteToDurationFormat(it) }
         binding.contentTvShowDetail.tvShowGenres.text =
@@ -94,7 +99,7 @@ class TvShowDetailActivity : AppCompatActivity() {
             )
             .into(binding.tvShowBackdrop)
 
-//        setYTPlayer(showDetails.youtubeVideoId)
+        showDetails.youtubeVideoIds?.get(0)?.let { setYTPlayer(it) }
     }
 
     private fun setYTPlayer(videoId: String) {

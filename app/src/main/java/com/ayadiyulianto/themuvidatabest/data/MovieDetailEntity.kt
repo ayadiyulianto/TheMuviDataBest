@@ -15,5 +15,6 @@ data class MovieDetailEntity(
     val runtime: Int?,
     val posterPath: String?,
     val releaseDate: String?,
-    val voteAverage: Double?
+    val voteAverage: Double?,
+    val youtubeVideoIds: List<String?>?
 ):Parcelable

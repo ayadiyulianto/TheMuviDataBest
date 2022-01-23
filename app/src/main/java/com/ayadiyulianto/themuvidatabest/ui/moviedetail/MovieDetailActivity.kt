@@ -1,6 +1,7 @@
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.ayadiyulianto.themuvidatabest.R
@@ -42,6 +43,10 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         }
 
+        movieDetailViewModel.isLoading().observe(this, {
+            binding.contentMovieDetail.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
         binding.fabFavorite.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -54,7 +59,7 @@ class MovieDetailActivity : AppCompatActivity() {
         binding.contentMovieDetail.movieTitle.text = movieDetails.title ?: movieDetails.originalTitle
         binding.contentMovieDetail.movieSinopsis.text = movieDetails.overview
         binding.contentMovieDetail.movieReleaseDate.text = changeStringToDateFormat(movieDetails.releaseDate)
-        binding.contentMovieDetail.movieRating.rating = (movieDetails.voteAverage?.toFloat() ?: 0F) /20
+        binding.contentMovieDetail.movieRating.rating = (movieDetails.voteAverage?.toFloat() ?: 0F) /2
         binding.contentMovieDetail.movieDuration.text = movieDetails.runtime?.let {
             changeMinuteToDurationFormat(
                 it
@@ -80,7 +85,7 @@ class MovieDetailActivity : AppCompatActivity() {
             )
             .into(binding.movieBackdrop)
 
-//        setYTPlayer(movieDetails.youtubeVideoId)
+        movieDetails.youtubeVideoIds?.get(0)?.let { setYTPlayer(it) }
     }
 
     private fun setYTPlayer(videoId: String) {

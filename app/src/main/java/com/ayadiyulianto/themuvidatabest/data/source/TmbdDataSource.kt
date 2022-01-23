@@ -8,7 +8,7 @@ import com.ayadiyulianto.themuvidatabest.data.TvShowEntity
 
 interface TmdbDataSource {
     fun getDiscoverMovies(): LiveData<List<MovieEntity>>
-    fun getDiscoverTvShow(): LiveData<List<TvShowEntity>>
+    fun getDiscoverTvShows(): LiveData<List<TvShowEntity>>
     fun getMovieDetail(movieId: String): LiveData<MovieDetailEntity>
     fun getTvShowDetail(showId: String): LiveData<TvShowDetailEntity>
 }

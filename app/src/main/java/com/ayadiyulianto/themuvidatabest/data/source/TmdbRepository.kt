@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ayadiyulianto.themuvidatabest.data.*
 import com.ayadiyulianto.themuvidatabest.data.source.remote.RemoteDataSource
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.MovieDetailResponse
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.ResultsItemMovie
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.ResultsItemTvShow
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.TvShowDetailResponse
+import com.ayadiyulianto.themuvidatabest.data.source.remote.response.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -16,6 +13,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+    private val imageBaseUrl = "https://image.tmdb.org/t/p/w500"
 
     companion object{
         @Volatile
@@ -39,8 +37,8 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                                 response.overview,
                                 response.originalTitle,
                                 response.title,
-                                response.posterPath,
-                                response.backdropPath,
+                                "$imageBaseUrl${response.posterPath}",
+                                "$imageBaseUrl${response.backdropPath}",
                                 response.releaseDate,
                                 response.voteAverage,
                                 response.id
@@ -55,7 +53,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
         return listOfMovie
     }
 
-    override fun getDiscoverTvShow(): LiveData<List<TvShowEntity>> {
+    override fun getDiscoverTvShows(): LiveData<List<TvShowEntity>> {
         _isLoading.value = true
         val listOfShow = MutableLiveData<List<TvShowEntity>>()
         CoroutineScope(IO).launch{
@@ -67,8 +65,8 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                             response.overview,
                             response.originalName,
                             response.name,
-                            response.posterPath,
-                            response.backdropPath,
+                            "$imageBaseUrl${response.posterPath}",
+                            "$imageBaseUrl${response.backdropPath}",
                             response.firstAirDate,
                             response.voteAverage,
                             response.id
@@ -88,25 +86,26 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
         val movieResult = MutableLiveData<MovieDetailEntity>()
         CoroutineScope(IO).launch{
             remoteDataSource.getMovie(movieId, object : RemoteDataSource.CallbackLoadMovieDetail{
-                override fun onMovieDetailsRecieved(showResponse: MovieDetailResponse) {
+                override fun onMovieDetailsRecieved(movieResponse: MovieDetailResponse) {
                     val listOfGenre = ArrayList<String>()
 
-                    for (genre in (showResponse.genres)!!){
+                    for (genre in (movieResponse.genres)!!){
                         listOfGenre.add(genre!!.name!!)
                     }
 
                     val movie = MovieDetailEntity(
-                        showResponse.id,
-                        showResponse.title,
-                        showResponse.backdropPath,
+                        movieResponse.id,
+                        movieResponse.title,
+                        "$imageBaseUrl${movieResponse.backdropPath}",
                         listOfGenre,
-                        showResponse.voteCount,
-                        showResponse.overview,
-                        showResponse.originalTitle,
-                        showResponse.runtime,
-                        showResponse.posterPath,
-                        showResponse.releaseDate,
-                        showResponse.voteAverage
+                        movieResponse.voteCount,
+                        movieResponse.overview,
+                        movieResponse.originalTitle,
+                        movieResponse.runtime,
+                        "$imageBaseUrl${movieResponse.posterPath}",
+                        movieResponse.releaseDate,
+                        movieResponse.voteAverage,
+                        movieResponse.videos?.toYoutubeVideoIds()
                     )
                     _isLoading.postValue(false)
                     movieResult.postValue(movie)
@@ -136,7 +135,7 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                             data?.id,
                             data?.name,
                             data?.overview,
-                            data?.posterPath as String?,
+                            "$imageBaseUrl${data?.posterPath as String?}",
                             data?.seasonNumber
                         )
                         listOfSeasonData.add(season)
@@ -145,16 +144,17 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
                     val show = TvShowDetailEntity(
                         showResponse.id,
                         showResponse.name,
-                        showResponse.backdropPath,
+                        "$imageBaseUrl${showResponse.backdropPath}",
                         listOfGenre,
                         showResponse.voteCount,
                         showResponse.overview,
                         listOfSeasonData,
                         showResponse.originalName,
                         showResponse.episodeRunTime,
-                        showResponse.posterPath,
+                        "$imageBaseUrl${showResponse.posterPath}",
                         showResponse.firstAirDate,
-                        showResponse.voteAverage
+                        showResponse.voteAverage,
+                        showResponse.videos?.toYoutubeVideoIds()
                     )
                     _isLoading.postValue(false)
                     showResult.postValue(show)
@@ -163,5 +163,4 @@ class TmdbRepository private constructor(private val remoteDataSource: RemoteDat
         }
         return showResult
     }
-
 }

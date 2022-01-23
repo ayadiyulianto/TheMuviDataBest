@@ -12,28 +12,29 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("discover/movie")
     fun getDiscoverMovie(
-        @Query("api_key") api_key: String?,
+        @Query("api_key") api_key: String,
         @Query("language") language: String
     ): Call<DiscoverMovieResponse>
 
     @GET("discover/tv")
     fun getDiscoverTvShow(
-        @Query("api_key") api_key: String?,
+        @Query("api_key") api_key: String,
         @Query("language") language: String
     ): Call<DiscoverTvShowResponse>
 
     @GET("movie/{movieId}")
     fun getDetailMovie(
         @Path("movieId") movieId: String,
-        @Query("api_key") api_key: String?,
-        @Query("language") language: String
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("append_to_response") append_to_response: String? = null
     ): Call<MovieDetailResponse>
 
     @GET("tv/{tvShowId}")
     fun getDetailTvShow(
         @Path("tvShowId") tvShowId: String,
-        @Query("api_key") api_key: String?,
-        @Query("language") language: String
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("append_to_response") append_to_response: String? = null
     ): Call<TvShowDetailResponse>
-
 }

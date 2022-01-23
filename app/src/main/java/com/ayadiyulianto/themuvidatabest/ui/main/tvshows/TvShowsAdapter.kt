@@ -1,5 +1,6 @@
-package com.ayadiyulianto.themuvidatabest.ui.tvshows
+package com.ayadiyulianto.themuvidatabest.ui.main.tvshows
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
 
     private var listTvShows = ArrayList<TvShowEntity>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setTvShow(shows: List<TvShowEntity>?) {
         if (shows == null) return
         this.listTvShows.clear()
@@ -42,7 +44,7 @@ class TvShowsAdapter: RecyclerView.Adapter<TvShowsAdapter.TvShowViewHolder>() {
 
                 tvItemDate.text = changeStringToDateFormat(show.firstAirDate)
 
-                tvItemRating.rating = (show.voteAverage?.toFloat() ?: 0F) / 20
+                tvItemRating.rating = (show.voteAverage?.toFloat() ?: 0F) / 2
 
                 tvItemSynopsis.text = show.overview
 

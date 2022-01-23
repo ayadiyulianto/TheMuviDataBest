@@ -7,6 +7,7 @@ import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.data.TvShowSeasonEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ItemSeasonsBinding
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringDateToYear
+import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -38,7 +39,7 @@ class SeasonsAdapter: RecyclerView.Adapter<SeasonsAdapter.SeasonViewHolder>() {
             with(binding) {
                 "Season ${season.seasonNumber}".also { tvItemTitle.text = it }
                 "${season.airDate?.let { changeStringDateToYear(it) }} | ${season.episodeCount} Eps.".also { tvItemYear.text = it }
-                "Season ${season.seasonNumber} premiered on ${season.airDate}.".also { tvItemPremiere.text = it }
+                "Season ${season.seasonNumber} premiered on ${season.airDate?.let { changeStringToDateFormat(it) }}.".also { tvItemPremiere.text = it }
                 season.overview.also { tvItemDescription.text = it }
 
                 Glide.with(itemView.context)

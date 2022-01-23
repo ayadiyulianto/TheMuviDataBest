@@ -14,7 +14,7 @@ object Utils {
             val strDate: String? = value
 
             //current date format
-            val dateFormat = SimpleDateFormat("MM/dd/yyyy")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
             val objDate: Date = dateFormat.parse(strDate)
 
             //Expected date format
@@ -35,12 +35,11 @@ object Utils {
         }else{
             "$minute m"
         }
-
     }
 
     @SuppressLint("NewApi")
     fun changeStringDateToYear(date: String): Int{
-        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy")
+        val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val localDate: LocalDate = LocalDate.parse(date, formatter)
 
         return localDate.year

@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.ui.tvshows
+package com.ayadiyulianto.themuvidatabest.ui.main.tvshows
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,6 +41,10 @@ class TvShowsFragment : Fragment() {
         val discoverTvShows = tvShowsViewModel.getDiscoverTvShow()
         discoverTvShows.observe(viewLifecycleOwner, { shows ->
             tvShowAdapter.setTvShow(shows)
+        })
+
+        tvShowsViewModel.isLoading().observe(viewLifecycleOwner, {
+            binding.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
         })
 
         with(binding.rvTvshows) {
