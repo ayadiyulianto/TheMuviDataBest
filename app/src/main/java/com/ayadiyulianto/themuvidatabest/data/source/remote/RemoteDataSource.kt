@@ -14,7 +14,7 @@ class RemoteDataSource {
     companion object {
         @Volatile
         private var instance: RemoteDataSource ? = null
-        private val API_KEY = BuildConfig.TMDB_API_KEY
+        private const val API_KEY = BuildConfig.TMDB_API_KEY
         private const val language = "en-US"
 
         fun getInstance(): RemoteDataSource =
@@ -45,7 +45,7 @@ class RemoteDataSource {
 
     suspend fun getMovie(movieId: String, callbackDetail: CallbackLoadMovieDetail){
         EspressoIdlingResource.increment()
-        ApiConfig.getApiService().getDetailMovie(movieId, API_KEY, language).await().let{
+        ApiConfig.getApiService().getDetailMovie(movieId, API_KEY, language, "videos").await().let{
             movie -> callbackDetail.onMovieDetailsRecieved((
                 movie
                 ))
@@ -55,7 +55,7 @@ class RemoteDataSource {
 
     suspend fun getTvShow(showId: String, callbackDetail: CallbackLoadTvShowDetail){
         EspressoIdlingResource.increment()
-        ApiConfig.getApiService().getDetailTvShow(showId, API_KEY, language).await().let{
+        ApiConfig.getApiService().getDetailTvShow(showId, API_KEY, language, "videos").await().let{
             show -> callbackDetail.onTvShowDetailsRecieved((
                 show
                 ))
@@ -72,7 +72,7 @@ class RemoteDataSource {
     }
 
     interface CallbackLoadMovieDetail{
-        fun onMovieDetailsRecieved(showResponse: MovieDetailResponse)
+        fun onMovieDetailsRecieved(movieResponse: MovieDetailResponse)
     }
 
     interface CallbackLoadTvShowDetail{

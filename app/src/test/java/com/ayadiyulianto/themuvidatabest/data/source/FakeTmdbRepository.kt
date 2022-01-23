@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ayadiyulianto.themuvidatabest.data.*
 import com.ayadiyulianto.themuvidatabest.data.source.remote.RemoteDataSource
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.MovieDetailResponse
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.ResultsItemMovie
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.ResultsItemTvShow
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.TvShowDetailResponse
+import com.ayadiyulianto.themuvidatabest.data.source.remote.response.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -15,7 +12,6 @@ import kotlinx.coroutines.launch
 class FakeTmdbRepository (private val remoteDataSource: RemoteDataSource): TmdbDataSource {
 
     private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
 
     override fun getDiscoverMovies(): LiveData<List<MovieEntity>> {
         _isLoading.value = true
@@ -45,7 +41,7 @@ class FakeTmdbRepository (private val remoteDataSource: RemoteDataSource): TmdbD
         return listOfMovie
     }
 
-    override fun getDiscoverTvShow(): LiveData<List<TvShowEntity>> {
+    override fun getDiscoverTvShows(): LiveData<List<TvShowEntity>> {
         _isLoading.value = true
         val listOfShow = MutableLiveData<List<TvShowEntity>>()
         CoroutineScope(IO).launch{
@@ -96,7 +92,8 @@ class FakeTmdbRepository (private val remoteDataSource: RemoteDataSource): TmdbD
                         showResponse.runtime,
                         showResponse.posterPath,
                         showResponse.releaseDate,
-                        showResponse.voteAverage
+                        showResponse.voteAverage,
+                        showResponse.videos?.toYoutubeVideoIds()
                     )
                     _isLoading.postValue(false)
                     movieResult.postValue(movie)
@@ -144,7 +141,8 @@ class FakeTmdbRepository (private val remoteDataSource: RemoteDataSource): TmdbD
                         showResponse.episodeRunTime,
                         showResponse.posterPath,
                         showResponse.firstAirDate,
-                        showResponse.voteAverage
+                        showResponse.voteAverage,
+                        showResponse.videos?.toYoutubeVideoIds()
                     )
                     _isLoading.postValue(false)
                     showResult.postValue(show)

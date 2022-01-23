@@ -6,10 +6,7 @@
     <string name="welcome_details">Millions of movies, TV shows and people to discover. Explore now.</string>
     <string name="movie">Movie</string>
     <string name="tv_show">TV Show</string>
-    <string name="list_of_movies">List of Movies</string>
-    <string name="list_of_tv_shows">List of TV Shows</string>
     <string name="sinopsis">Synopsis</string>
-    <string name="trailer">Trailer</string>
     <string name="season">Season</string>
     <string name="title_activity_movie_detail">Movie Detail</string>
     <string name="large_text">
@@ -101,11 +98,11 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="action_settings">Settings</string>
     <string name="poster">Poster</string>
     <string name="dummy_title">Alita Battle Angel</string>
     <string name="dummy_date">Dec 11, 2021</string>
     <string name="title_activity_tv_show_detail">Tv Show Detail</string>
     <string name="dummy_duration">2 h 10 m</string>
     <string name="dummy_genre">Action, Adventure, Fantasy, Sci-Fi</string>
+    <string name="videos">Videos</string>
 </resources>

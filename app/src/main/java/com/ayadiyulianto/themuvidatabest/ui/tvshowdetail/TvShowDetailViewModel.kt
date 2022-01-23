@@ -7,5 +7,5 @@ import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
 
 class TvShowDetailViewModel(private val tmdbRepository: TmdbRepository): ViewModel() {
     fun getTvShowDetail(showId: String): LiveData<TvShowDetailEntity> = tmdbRepository.getTvShowDetail(showId)
-    fun getLoading():LiveData<Boolean> = tmdbRepository.isLoading
+    fun isLoading():LiveData<Boolean> = tmdbRepository.isLoading
 }

@@ -1,5 +1,6 @@
-package com.ayadiyulianto.themuvidatabest.ui.movies
+package com.ayadiyulianto.themuvidatabest.ui.main.movies
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
     private var listMovies = ArrayList<MovieEntity>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setMovies(movies: List<MovieEntity>?) {
         if (movies == null) return
         this.listMovies.clear()
@@ -41,7 +43,7 @@ class MoviesAdapter: RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
                 tvItemTitle.text = movie.title
                 tvItemDate.text = Utils.changeStringToDateFormat(movie.releaseDate)
 
-                tvItemRating.rating = (movie.voteAverage?.toFloat() ?: 0F) / 20
+                tvItemRating.rating = (movie.voteAverage?.toFloat() ?: 0F) / 2
 
                 tvItemSynopsis.text = movie.overview
 

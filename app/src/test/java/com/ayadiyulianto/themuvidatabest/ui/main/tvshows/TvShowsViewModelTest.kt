@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.ui.tvshows
+package com.ayadiyulianto.themuvidatabest.ui.main.tvshows
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -41,10 +41,10 @@ class TvShowsViewModelTest {
         val shows = MutableLiveData<List<TvShowEntity>>()
         shows.value = DataDummy.generateDummyTvShow()
 
-        Mockito.`when`(tmdbRepository.getDiscoverTvShow()).thenReturn(shows)
+        Mockito.`when`(tmdbRepository.getDiscoverTvShows()).thenReturn(shows)
 
         val dataListShow = viewModel.getDiscoverTvShow().value
-        Mockito.verify(tmdbRepository).getDiscoverTvShow()
+        Mockito.verify(tmdbRepository).getDiscoverTvShows()
         assertNotNull(dataListShow)
         assertEquals(10, dataListShow?.size)
 

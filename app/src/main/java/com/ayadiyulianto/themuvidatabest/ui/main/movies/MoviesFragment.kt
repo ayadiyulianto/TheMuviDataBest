@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.ui.movies
+package com.ayadiyulianto.themuvidatabest.ui.main.movies
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -41,6 +41,10 @@ class MoviesFragment : Fragment() {
         val discoverMovies = moviesViewModel.getDiscoverMovies()
         discoverMovies.observe(viewLifecycleOwner, { movies ->
             movieAdapter.setMovies(movies)
+        })
+
+        moviesViewModel.isLoading().observe(viewLifecycleOwner, {
+            binding.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
         })
 
         with(binding.rvMovies) {

@@ -1,6 +1,7 @@
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import com.ayadiyulianto.themuvidatabest.R
@@ -42,6 +43,11 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         }
 
+        movieDetailViewModel.isLoading().observe(this, {
+            binding.contentMovieDetail.progressCircular.visibility =
+                if (it) View.VISIBLE else View.GONE
+        })
+
         binding.fabFavorite.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
@@ -49,19 +55,24 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun showDetailMovie(movieDetails: MovieDetailEntity) {
-        binding.toolbarLayout.title = movieDetails.title ?: movieDetails.originalTitle
-        binding.movieBackdrop.alpha = 0.75F
-        binding.contentMovieDetail.movieTitle.text = movieDetails.title ?: movieDetails.originalTitle
-        binding.contentMovieDetail.movieSinopsis.text = movieDetails.overview
-        binding.contentMovieDetail.movieReleaseDate.text = changeStringToDateFormat(movieDetails.releaseDate)
-        binding.contentMovieDetail.movieRating.rating = (movieDetails.voteAverage?.toFloat() ?: 0F) /20
-        binding.contentMovieDetail.movieDuration.text = movieDetails.runtime?.let {
-            changeMinuteToDurationFormat(
-                it
-            )
+        with(binding) {
+            toolbarLayout.title = movieDetails.title ?: movieDetails.originalTitle
+            movieBackdrop.alpha = 0.75F
+            contentMovieDetail.movieTitle.text =
+                movieDetails.title ?: movieDetails.originalTitle
+            contentMovieDetail.movieSinopsis.text = movieDetails.overview
+            contentMovieDetail.movieReleaseDate.text =
+                changeStringToDateFormat(movieDetails.releaseDate)
+            contentMovieDetail.movieRating.rating =
+                (movieDetails.voteAverage?.toFloat() ?: 0F) / 2
+            contentMovieDetail.movieDuration.text = movieDetails.runtime?.let {
+                changeMinuteToDurationFormat(
+                    it
+                )
+            }
+            contentMovieDetail.movieGenres.text =
+                movieDetails.genres?.joinToString(separator = " • ") ?: "-"
         }
-        binding.contentMovieDetail.movieGenres.text =
-            movieDetails.genres?.joinToString(separator = " • ") ?: "-"
 
         Glide.with(this)
             .load(movieDetails.posterPath)
@@ -70,7 +81,7 @@ class MovieDetailActivity : AppCompatActivity() {
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                     .error(R.drawable.ic_error)
             )
-            .into(binding.contentMovieDetail.moviePoster )
+            .into(binding.contentMovieDetail.moviePoster)
 
         Glide.with(this)
             .load(movieDetails.backdropPath)
@@ -80,7 +91,7 @@ class MovieDetailActivity : AppCompatActivity() {
             )
             .into(binding.movieBackdrop)
 
-//        setYTPlayer(movieDetails.youtubeVideoId)
+        movieDetails.youtubeVideoIds?.get(0)?.let { setYTPlayer(it) }
     }
 
     private fun setYTPlayer(videoId: String) {
