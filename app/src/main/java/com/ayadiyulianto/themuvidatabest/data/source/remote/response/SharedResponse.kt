@@ -54,7 +54,7 @@ data class VideosItem(
     val id: String? = null,
 )
 
-fun VideoResults.toYoutubeVideoIds(): List<String?>? {
-    val ytVideos = this.results?.filter { it.site == "YouTube" }
-    return ytVideos?.map { it.key }
+fun VideoResults.getYoutubeTrailerId(): String? {
+    val ytVideos = this.results?.filter { it.site == "YouTube" && it.type == "Trailer" }
+    return ytVideos?.get(0)?.key
 }

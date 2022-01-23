@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.TvShowSeasonEntity
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowSeasonEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ItemSeasonsBinding
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringDateToYear
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat

@@ -1,11 +1,35 @@
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ayadiyulianto.themuvidatabest.data.MovieDetailEntity
-import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
+import com.ayadiyulianto.themuvidatabest.vo.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MovieDetailViewModel(private val tmdbRepository: TmdbRepository): ViewModel(){
-    fun getMovieDetail(movieId: String): LiveData<MovieDetailEntity> = tmdbRepository.getMovieDetail(movieId)
-    fun isLoading(): LiveData<Boolean> = tmdbRepository.isLoading
+@HiltViewModel
+class MovieDetailViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
+    ViewModel() {
+
+    private var movieData: LiveData<Resource<MovieEntity>> = MutableLiveData()
+
+    fun getMovieDetail(movieId: String): LiveData<Resource<MovieEntity>> {
+        movieData = tmdbRepository.getMovieDetail(movieId)
+        return movieData
+    }
+
+    fun setFavorite(): Boolean {
+        val movieResource = movieData.value
+        if (movieResource != null) {
+            val movieDetail = movieResource.data
+            val newState = !(movieDetail?.favorited ?: false)
+            if (movieDetail != null) {
+                tmdbRepository.setFavoriteMovie(movieDetail, newState)
+                return newState
+            }
+        }
+        return false
+    }
 }

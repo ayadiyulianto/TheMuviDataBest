@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.ayadiyulianto.themuvidatabest.data.TvShowDetailEntity
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowDetailEntity
 import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
 

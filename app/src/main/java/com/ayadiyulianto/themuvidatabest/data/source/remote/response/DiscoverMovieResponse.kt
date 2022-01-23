@@ -53,7 +53,7 @@ data class ResultsItemMovie(
 	val voteAverage: Double,
 
 	@field:SerializedName("id")
-	val id: Long,
+	val id: Int,
 
 	@field:SerializedName("adult")
 	val adult: Boolean,

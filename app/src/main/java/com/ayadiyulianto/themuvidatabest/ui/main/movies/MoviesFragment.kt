@@ -4,16 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.databinding.FragmentMoviesBinding
-import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.ui.main.MainActivity
+import com.ayadiyulianto.themuvidatabest.vo.Status
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MoviesFragment : Fragment() {
 
-    private lateinit var moviesViewModel: MoviesViewModel
+    private val moviesViewModel: MoviesViewModel by viewModels()
     private var _binding: FragmentMoviesBinding? = null
 
     // This property is only valid between onCreateView and
@@ -28,7 +32,6 @@ class MoviesFragment : Fragment() {
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
 
         (activity as MainActivity).setToolbarTitle(getString(R.string.movie))
-        moviesViewModel = MoviesViewModel(Injection.provideImdbRepository(requireContext()))
 
         return binding.root
     }
@@ -38,13 +41,22 @@ class MoviesFragment : Fragment() {
 
         val movieAdapter = MoviesAdapter()
 
-        val discoverMovies = moviesViewModel.getDiscoverMovies()
-        discoverMovies.observe(viewLifecycleOwner, { movies ->
-            movieAdapter.setMovies(movies)
-        })
-
-        moviesViewModel.isLoading().observe(viewLifecycleOwner, {
-            binding.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
+        moviesViewModel.getDiscoverMovies().observe(viewLifecycleOwner, { res ->
+            when (res.status) {
+                Status.LOADING -> binding.progressCircular.visibility = View.VISIBLE
+                Status.SUCCESS -> {
+                    binding.progressCircular.visibility = View.GONE
+                    movieAdapter.submitList(res.data)
+                }
+                Status.ERROR -> {
+                    binding.progressCircular.visibility = View.GONE
+                    Toast.makeText(
+                        context,
+                        getString(R.string.error_while_getting_data),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         })
 
         with(binding.rvMovies) {

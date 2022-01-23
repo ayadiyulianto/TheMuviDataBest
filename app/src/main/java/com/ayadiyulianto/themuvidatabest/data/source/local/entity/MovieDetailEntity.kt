@@ -1,19 +1,18 @@
-package com.ayadiyulianto.themuvidatabest.data
+package com.ayadiyulianto.themuvidatabest.data.source.local.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class TvShowDetailEntity(
+data class MovieDetailEntity(
     val id: Int?,
-    val name: String?,
+    val title: String?,
     val backdropPath: String?,
-    val genres:ArrayList<String>?,
+    val genres: ArrayList<String>?,
     val voteCount: Int?,
     val overview: String?,
-    val seasons: ArrayList<TvShowSeasonEntity>?,
-    val originalName: String?,
-    val runtime: List<Int?>?,
+    val originalTitle: String?,
+    val runtime: Int?,
     val posterPath: String?,
     val releaseDate: String?,
     val voteAverage: Double?,

@@ -29,7 +29,7 @@ data class TvShowDetailResponse(
 	val productionCountries: List<ProductionCountriesItem?>? = null,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int = 0,
 
 	@field:SerializedName("number_of_seasons")
 	val numberOfSeasons: Int? = null,
@@ -182,8 +182,8 @@ data class SeasonsItem(
 	val seasonNumber: Int? = null,
 
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int,
 
 	@field:SerializedName("poster_path")
-	val posterPath: Any? = null
+	val posterPath: String? = null
 )

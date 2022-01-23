@@ -11,7 +11,7 @@ object LiveDataTestUtil {
         val data = arrayOfNulls<Any>(1)
         val latch = CountDownLatch(1)
 
-        val observer = object: Observer<T>{
+        val observer = object: Observer<T> {
             override fun onChanged(t: T) {
                 data[0] = t
                 latch.countDown()

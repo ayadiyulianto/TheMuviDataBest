@@ -1,25 +1,29 @@
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.MovieDetailEntity
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ActivityMovieDetailBinding
-import com.ayadiyulianto.themuvidatabest.di.Injection
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeMinuteToDurationFormat
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
+import com.ayadiyulianto.themuvidatabest.vo.Status
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailBinding
-    private lateinit var movieDetailViewModel: MovieDetailViewModel
+    private val movieDetailViewModel: MovieDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,36 +34,49 @@ class MovieDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        movieDetailViewModel = MovieDetailViewModel(Injection.provideImdbRepository(this))
-
         val extras = intent.extras
         if (extras != null) {
             val movieId = extras.getLong(EXTRA_MOVIE)
             if (movieId != 0L) {
                 val movieDetails = movieDetailViewModel.getMovieDetail(movieId.toString())
-                movieDetails.observe(this, { movie ->
-                    showDetailMovie(movie)
+                movieDetails.observe(this, { res ->
+                    when (res.status) {
+                        Status.LOADING -> binding.contentMovieDetail.progressCircular.visibility =
+                            View.VISIBLE
+                        Status.SUCCESS -> {
+                            Log.e("result", res.data.toString())
+                            binding.contentMovieDetail.progressCircular.visibility = View.GONE
+                            res.data?.let { showDetailMovie(it) }
+                        }
+                        Status.ERROR -> {
+                            binding.contentMovieDetail.progressCircular.visibility = View.GONE
+                            Toast.makeText(
+                                this,
+                                getString(R.string.error_while_getting_data),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 })
             }
         }
 
-        movieDetailViewModel.isLoading().observe(this, {
-            binding.contentMovieDetail.progressCircular.visibility =
-                if (it) View.VISIBLE else View.GONE
-        })
-
-        binding.fabFavorite.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.fabFavorite.setOnClickListener {
+            val newState = movieDetailViewModel.setFavorite()
+            if (newState) {
+                Toast.makeText(this, R.string.addedToFavorite, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, R.string.removedFromFavorite, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    private fun showDetailMovie(movieDetails: MovieDetailEntity) {
+    private fun showDetailMovie(movieDetails: MovieEntity) {
         with(binding) {
-            toolbarLayout.title = movieDetails.title ?: movieDetails.originalTitle
+            setFabIcon(movieDetails.favorited ?: false)
+            toolbarLayout.title = movieDetails.title
             movieBackdrop.alpha = 0.75F
-            contentMovieDetail.movieTitle.text =
-                movieDetails.title ?: movieDetails.originalTitle
+            contentMovieDetail.movieTitle.text = movieDetails.title
             contentMovieDetail.movieSinopsis.text = movieDetails.overview
             contentMovieDetail.movieReleaseDate.text =
                 changeStringToDateFormat(movieDetails.releaseDate)
@@ -70,8 +87,7 @@ class MovieDetailActivity : AppCompatActivity() {
                     it
                 )
             }
-            contentMovieDetail.movieGenres.text =
-                movieDetails.genres?.joinToString(separator = " • ") ?: "-"
+            contentMovieDetail.movieGenres.text = movieDetails.genres
         }
 
         Glide.with(this)
@@ -91,7 +107,15 @@ class MovieDetailActivity : AppCompatActivity() {
             )
             .into(binding.movieBackdrop)
 
-        movieDetails.youtubeVideoIds?.get(0)?.let { setYTPlayer(it) }
+        movieDetails.youtubeTrailerId?.let { setYTPlayer(it) }
+    }
+
+    private fun setFabIcon(isFavorited: Boolean) {
+        if (isFavorited) {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
     }
 
     private fun setYTPlayer(videoId: String) {

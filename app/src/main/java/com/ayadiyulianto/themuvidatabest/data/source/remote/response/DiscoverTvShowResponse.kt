@@ -53,7 +53,7 @@ data class ResultsItemTvShow(
 	val name: String,
 
 	@field:SerializedName("id")
-	val id: Long,
+	val id: Int,
 
 	@field:SerializedName("vote_count")
 	val voteCount: Int

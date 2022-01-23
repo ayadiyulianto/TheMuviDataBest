@@ -1,11 +1,9 @@
-package com.ayadiyulianto.themuvidatabest.data.source
+package com.ayadiyulianto.themuvidatabest.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.ayadiyulianto.themuvidatabest.data.NetworkBoundResource
-import com.ayadiyulianto.themuvidatabest.data.TmdbDataSource
 import com.ayadiyulianto.themuvidatabest.data.source.local.LocalDataSource
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.*
 import com.ayadiyulianto.themuvidatabest.data.source.remote.ApiResponse
@@ -19,16 +17,75 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-class FakeTmdbRepository constructor(
+class TmdbRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
-): TmdbDataSource {
+) : TmdbDataSource {
 
     private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+    private val imageBaseUrl = "https://image.tmdb.org/t/p/w500"
+
+    companion object {
+        @Volatile
+        private var instance: TmdbRepository? = null
+
+        fun getInstance(
+            remoteData: RemoteDataSource,
+            localData: LocalDataSource,
+            appExecutors: AppExecutors
+        ): TmdbRepository =
+            instance ?: synchronized(this) {
+                instance ?: TmdbRepository(remoteData, localData, appExecutors).apply {
+                    instance = this
+                }
+            }
+    }
+
+    override fun getSearchResult(title: String): LiveData<List<SearchEntity>> {
+        _isLoading.value = true
+        val listOfResult = MutableLiveData<List<SearchEntity>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getSearchResult(
+                title,
+                object : RemoteDataSource.CallbackLoadSearchResult {
+                    override fun onSearchResultRecieved(showResponse: List<SearchResultsItem?>?) {
+                        val res = ArrayList<SearchEntity>()
+                        if (showResponse != null) {
+                            for (responseSearch in showResponse) {
+                                if (responseSearch != null) {
+                                    if (responseSearch.mediaType == "tv" || responseSearch.mediaType == "movie") {
+                                        //for return result
+                                        val resSearch = SearchEntity(
+                                            responseSearch.id,
+                                            if (responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
+                                            "$imageBaseUrl${responseSearch.posterPath}",
+                                            "$imageBaseUrl${responseSearch.backdropPath}",
+                                            responseSearch.mediaType,
+                                            responseSearch.overview,
+                                            responseSearch.voteAverage,
+                                            if (responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
+                                        )
+
+                                        if (!res.contains(resSearch)) {
+                                            res.add(resSearch)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _isLoading.postValue(false)
+                        listOfResult.postValue(res)
+                    }
+                })
+        }
+        return listOfResult
+    }
 
     override fun getDiscoverMovies(): LiveData<Resource<PagedList<MovieEntity>>> {
-        return object: NetworkBoundResource<PagedList<MovieEntity>, List<ResultsItemMovie>>(appExecutors) {
+        return object :
+            NetworkBoundResource<PagedList<MovieEntity>, List<ResultsItemMovie>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
@@ -46,13 +103,13 @@ class FakeTmdbRepository constructor(
 
             public override fun saveCallResult(data: List<ResultsItemMovie>) {
                 val movies = ArrayList<MovieEntity>()
-                for(response in data){
+                for (response in data) {
                     val movie = MovieEntity(
                         response.id,
                         response.title,
                         response.overview,
-                        response.posterPath,
-                        response.backdropPath,
+                        "$imageBaseUrl${response.posterPath}",
+                        "$imageBaseUrl${response.backdropPath}",
                         response.releaseDate,
                         response.voteAverage,
                         null,
@@ -66,8 +123,9 @@ class FakeTmdbRepository constructor(
     }
 
     override fun getMovieDetail(movieId: String): LiveData<Resource<MovieEntity>> {
-        return object: NetworkBoundResource<MovieEntity, MovieDetailResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<MovieEntity> = localDataSource.getMovieById(movieId)
+        return object : NetworkBoundResource<MovieEntity, MovieDetailResponse>(appExecutors) {
+            public override fun loadFromDB(): LiveData<MovieEntity> =
+                localDataSource.getMovieById(movieId)
 
             override fun shouldFetch(data: MovieEntity?): Boolean =
                 data?.runtime == null
@@ -78,26 +136,33 @@ class FakeTmdbRepository constructor(
             public override fun saveCallResult(data: MovieDetailResponse) {
                 val listOfGenre = ArrayList<String>()
 
-                for (genre in (data.genres)!!){
-                    listOfGenre.add(genre!!.name!!)
+                if (data.genres != null) {
+                    for (genre in (data.genres)) {
+                        if (genre != null) {
+                            genre.name?.let { listOfGenre.add(it) }
+                        }
+                    }
                 }
 
                 val movie = MovieEntity(
                     data.id,
                     data.title,
                     data.overview,
-                    data.posterPath,
-                    data.backdropPath,
+                    "$imageBaseUrl${data.posterPath}",
+                    "$imageBaseUrl${data.backdropPath}",
                     data.releaseDate,
-                    data.voteAverage!!,
+                    data.voteAverage ?: 0.0,
                     data.runtime,
-                    JSONArray(listOfGenre).toString()
+                    JSONArray(listOfGenre).toString(),
+                    data.videos?.getYoutubeTrailerId()
                 )
-                localDataSource.updateMovie(movie)
+
+                //using insert for add search result into db, and use the data for show later
+                localDataSource.insertMovies(arrayListOf(movie))
+
             }
         }.asLiveData()
     }
-
 
     override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
         val config = PagedList.Config.Builder()
@@ -118,7 +183,8 @@ class FakeTmdbRepository constructor(
     }
 
     override fun getDiscoverTvShow(): LiveData<Resource<PagedList<TvShowEntity>>> {
-        return object: NetworkBoundResource<PagedList<TvShowEntity>, List<ResultsItemTvShow>>(appExecutors){
+        return object :
+            NetworkBoundResource<PagedList<TvShowEntity>, List<ResultsItemTvShow>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
                 val config = PagedList.Config.Builder().apply {
                     setEnablePlaceholders(false)
@@ -136,17 +202,15 @@ class FakeTmdbRepository constructor(
 
             public override fun saveCallResult(data: List<ResultsItemTvShow>) {
                 val shows = ArrayList<TvShowEntity>()
-                for(response in data) {
+                for (response in data) {
                     val show = TvShowEntity(
                         response.id,
                         response.name,
                         response.overview,
-                        response.posterPath,
-                        response.backdropPath,
+                        "$imageBaseUrl${response.posterPath}",
+                        "$imageBaseUrl${response.backdropPath}",
                         response.voteAverage,
                         response.firstAirDate,
-                        null,
-                        null
                     )
                     shows.add(show)
                 }
@@ -159,8 +223,9 @@ class FakeTmdbRepository constructor(
         localDataSource.getTvShowWithSeason(showId)
 
     override fun getTvShowDetail(showId: String): LiveData<Resource<TvShowEntity>> {
-        return object: NetworkBoundResource<TvShowEntity,TvShowDetailResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<TvShowEntity> = localDataSource.getTvShowById(showId)
+        return object : NetworkBoundResource<TvShowEntity, TvShowDetailResponse>(appExecutors) {
+            public override fun loadFromDB(): LiveData<TvShowEntity> =
+                localDataSource.getTvShowById(showId)
 
             override fun shouldFetch(data: TvShowEntity?): Boolean =
                 data?.runtime == null
@@ -168,27 +233,33 @@ class FakeTmdbRepository constructor(
             public override fun createCall(): LiveData<ApiResponse<TvShowDetailResponse>> =
                 remoteDataSource.getTvShow(showId)
 
-            public override fun saveCallResult(data:TvShowDetailResponse) {
+            public override fun saveCallResult(data: TvShowDetailResponse) {
                 val listOfGenre = ArrayList<String>()
                 val listOfSeason = ArrayList<SeasonEntity>()
 
-                for (genre in (data.genres)!!){
-                    listOfGenre.add(genre!!.name!!)
+                if (data.genres != null) {
+                    for (genre in (data.genres)) {
+                        if (genre != null) {
+                            genre.name?.let { listOfGenre.add(it) }
+                        }
+                    }
                 }
 
-                for(season in(data.seasons)!!){
-                    if (season != null) {
-                        val s = SeasonEntity(
-                            season.id,
-                            data.id,
-                            season.name,
-                            season.overview,
-                            season.airDate,
-                            season.seasonNumber,
-                            season.episodeCount,
-                            season.posterPath.toString()
-                        )
-                        listOfSeason.add(s)
+                if (data.seasons != null) {
+                    for (season in (data.seasons)) {
+                        if (season != null) {
+                            val s = SeasonEntity(
+                                season.id,
+                                data.id,
+                                season.name,
+                                season.overview,
+                                season.airDate,
+                                season.seasonNumber,
+                                season.episodeCount,
+                                "$imageBaseUrl${season.posterPath}"
+                            )
+                            listOfSeason.add(s)
+                        }
                     }
                 }
 
@@ -196,64 +267,29 @@ class FakeTmdbRepository constructor(
                     data.id,
                     data.name,
                     data.overview,
-                    data.posterPath,
-                    data.backdropPath,
+                    "$imageBaseUrl${data.posterPath}",
+                    "$imageBaseUrl${data.backdropPath}",
                     data.voteAverage,
                     data.firstAirDate,
                     JSONArray(listOfGenre).toString(),
-                    data.episodeRunTime!![0]
+                    data.episodeRunTime?.get(0)
                 )
-                localDataSource.updateTvShow(show)
+                //using insert for add search result into db, and use the data for show later
+                localDataSource.insertTvShow(arrayListOf(show))
                 localDataSource.insertSeason(listOfSeason)
             }
         }.asLiveData()
     }
 
-    override fun setFavoriteMovie(movie: MovieEntity, newState: Boolean){
+    override fun setFavoriteMovie(movie: MovieEntity, newState: Boolean) {
         CoroutineScope(IO).launch {
             localDataSource.setMovieFavorite(movie, newState)
         }
     }
 
-    override fun setFavoriteTvShow(tvShow: TvShowEntity, newState: Boolean){
+    override fun setFavoriteTvShow(tvShow: TvShowEntity, newState: Boolean) {
         CoroutineScope(IO).launch {
             localDataSource.setTvShowFavorite(tvShow, newState)
         }
     }
-
-    override fun getSearchResult(title: String): LiveData<List<SearchEntity>> {
-        _isLoading.value = true
-        val listOfResult = MutableLiveData<List<SearchEntity>>()
-        CoroutineScope(IO).launch{
-            remoteDataSource.getSearchResult(title, object : RemoteDataSource.CallbackLoadSearchResult{
-                override fun onSearchResultRecieved(showResponse: List<SearchResultsItem?>?) {
-                    val res = ArrayList<SearchEntity>()
-                    if (showResponse != null) {
-                        for(responseSearch in showResponse){
-                            if(responseSearch!!.mediaType == "tv" || responseSearch.mediaType == "movie"){
-                                val resSearch = SearchEntity(
-                                    responseSearch.id,
-                                    if(responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
-                                    responseSearch.posterPath,
-                                    responseSearch.backdropPath,
-                                    responseSearch.mediaType,
-                                    responseSearch.overview,
-                                    responseSearch.voteAverage,
-                                    if(responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
-                                )
-
-                                if(!res.contains(resSearch)){
-                                    res.add(resSearch)
-                                }
-                            }
-                        }
-                    }
-                    _isLoading.postValue(false)
-                    listOfResult.postValue(res)
-                }
-            })
-        }
-        return listOfResult
-    }
-
 }

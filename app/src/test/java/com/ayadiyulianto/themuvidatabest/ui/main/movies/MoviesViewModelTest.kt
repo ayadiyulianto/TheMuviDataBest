@@ -3,9 +3,10 @@ package com.ayadiyulianto.themuvidatabest.ui.main.movies
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.ayadiyulianto.themuvidatabest.data.MovieEntity
-import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.util.DataDummy
+import androidx.paging.PagedList
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
+import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -26,7 +27,10 @@ class MoviesViewModelTest {
     private lateinit var tmdbRepository: TmdbRepository
 
     @Mock
-    private lateinit var observer: Observer<List<MovieEntity>>
+    private lateinit var observer: Observer<Resource<PagedList<MovieEntity>>>
+
+    @Mock
+    private lateinit var pagedList: PagedList<MovieEntity>
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -38,16 +42,16 @@ class MoviesViewModelTest {
 
     @Test
     fun getMovies() {
-        val dummyMovie= DataDummy.generateDummyMovie()
-        val movie = MutableLiveData<List<MovieEntity>>()
-        movie.value = DataDummy.generateDummyMovie()
+        val dummyMovie= Resource.success(pagedList)
+        `when`(dummyMovie.data?.size).thenReturn(1)
+        val movie = MutableLiveData<Resource<PagedList<MovieEntity>>>()
+        movie.value = dummyMovie
 
         `when`(tmdbRepository.getDiscoverMovies()).thenReturn(movie)
-
-        val dataListMovie = viewModel.getDiscoverMovies().value
+        val movieEntities = viewModel.getDiscoverMovies().value?.data
         verify(tmdbRepository).getDiscoverMovies()
-        assertNotNull(dataListMovie)
-        assertEquals(10, dataListMovie?.size)
+        assertNotNull(movieEntities)
+        assertEquals(1, movieEntities?.size)
 
         viewModel.getDiscoverMovies().observeForever(observer)
         verify(observer).onChanged(dummyMovie)

@@ -2,10 +2,17 @@ package com.ayadiyulianto.themuvidatabest.ui.main.tvshows
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ayadiyulianto.themuvidatabest.data.TvShowEntity
-import com.ayadiyulianto.themuvidatabest.data.source.TmdbRepository
+import androidx.paging.PagedList
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowEntity
+import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.vo.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TvShowsViewModel(private val tmdbRepository: TmdbRepository): ViewModel() {
-    fun getDiscoverTvShow(): LiveData<List<TvShowEntity>> = tmdbRepository.getDiscoverTvShows()
-    fun isLoading():LiveData<Boolean> = tmdbRepository.isLoading
+@HiltViewModel
+class TvShowsViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
+    ViewModel() {
+
+    fun getDiscoverTvShow(): LiveData<Resource<PagedList<TvShowEntity>>> =
+        tmdbRepository.getDiscoverTvShow()
 }
