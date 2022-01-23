@@ -46,7 +46,8 @@ class TvShowDetailActivity : AppCompatActivity() {
         }
 
         tvShowDetailViewModel.isLoading().observe(this, {
-            binding.contentTvShowDetail.progressCircular.visibility = if (it) View.VISIBLE else View.GONE
+            binding.contentTvShowDetail.progressCircular.visibility =
+                if (it) View.VISIBLE else View.GONE
         })
 
         binding.fabFavorite.setOnClickListener { view ->
@@ -67,20 +68,26 @@ class TvShowDetailActivity : AppCompatActivity() {
                 DividerItemDecoration(
                     this@TvShowDetailActivity,
                     DividerItemDecoration.VERTICAL
-                ))
+                )
+            )
             adapter = seasonAdapter
         }
-        
-        binding.toolbarLayout.title = showDetails.name ?: showDetails.originalName
-        binding.tvShowBackdrop.alpha = 0.75F
-        binding.contentTvShowDetail.tvShowTitle.text = showDetails.name ?: showDetails.originalName
-        binding.contentTvShowDetail.tvShowSinopsis.text = showDetails.overview
-        binding.contentTvShowDetail.tvShowReleaseDate.text = changeStringToDateFormat(showDetails.releaseDate)
-        binding.contentTvShowDetail.tvShowRating.rating = (showDetails.voteAverage?.toFloat() ?: 0F) /2
-        binding.contentTvShowDetail.tvShowDuration.text =
-            showDetails.runtime?.get(0)?.let { Utils.changeMinuteToDurationFormat(it) }
-        binding.contentTvShowDetail.tvShowGenres.text =
-            showDetails.genres?.joinToString(separator = " • ") ?: "-"
+
+        with(binding) {
+            toolbarLayout.title = showDetails.name ?: showDetails.originalName
+            tvShowBackdrop.alpha = 0.75F
+            contentTvShowDetail.tvShowTitle.text =
+                showDetails.name ?: showDetails.originalName
+            contentTvShowDetail.tvShowSinopsis.text = showDetails.overview
+            contentTvShowDetail.tvShowReleaseDate.text =
+                changeStringToDateFormat(showDetails.releaseDate)
+            contentTvShowDetail.tvShowRating.rating =
+                (showDetails.voteAverage?.toFloat() ?: 0F) / 2
+            contentTvShowDetail.tvShowDuration.text =
+                showDetails.runtime?.get(0)?.let { Utils.changeMinuteToDurationFormat(it) }
+            contentTvShowDetail.tvShowGenres.text =
+                showDetails.genres?.joinToString(separator = " • ") ?: "-"
+        }
 
         Glide.with(this)
             .load(showDetails.posterPath)
@@ -89,7 +96,7 @@ class TvShowDetailActivity : AppCompatActivity() {
                 RequestOptions.placeholderOf(R.drawable.ic_loading)
                     .error(R.drawable.ic_error)
             )
-            .into(binding.contentTvShowDetail.tvShowPoster )
+            .into(binding.contentTvShowDetail.tvShowPoster)
 
         Glide.with(this)
             .load(showDetails.backdropPath)
