@@ -16,5 +16,10 @@
         android:name="com.ayadiyulianto.themuvidatabest.ui.main.tvshows.TvShowsFragment"
         android:label="@string/title_tvshow"
         tools:layout="@layout/fragment_tv_shows" />
+    <fragment
+        android:id="@+id/navigation_favorites"
+        android:name="com.ayadiyulianto.themuvidatabest.ui.main.favorites.FavoritesFragment"
+        android:label="@string/title_favorite"
+        tools:layout="@layout/fragment_favorites" />
 
 </navigation>

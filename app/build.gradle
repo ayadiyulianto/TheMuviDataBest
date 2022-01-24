@@ -65,8 +65,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomVersion"
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
     implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation "androidx.legacy:legacy-support-v4:$legacySupportVersion"
+    implementation "com.github.mancj:MaterialSearchBar:$searchBarVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
 
     // testing
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"

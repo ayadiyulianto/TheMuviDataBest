@@ -30,6 +30,8 @@ buildscript {
         okhttpVersion = '4.9.0'
         roomVersion = '2.4.1'
         pagingVersion = '3.1.0'
+        searchBarVersion = '0.8.5'
+        legacySupportVersion = '1.0.0'
 
         junitVersion = '4.13.2'
         junitExtversion = '1.1.3'

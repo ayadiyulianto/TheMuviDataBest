@@ -2,9 +2,11 @@ package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowSeasonEntity
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.SeasonEntity
 import com.ayadiyulianto.themuvidatabest.databinding.ItemSeasonsBinding
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringDateToYear
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
@@ -12,15 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
-class SeasonsAdapter: RecyclerView.Adapter<SeasonsAdapter.SeasonViewHolder>() {
-
-    private var listSeason = ArrayList<TvShowSeasonEntity>()
-
-    fun setSeason(seasons: List<TvShowSeasonEntity>?) {
-        if (seasons == null) return
-        this.listSeason.clear()
-        this.listSeason.addAll(seasons)
-    }
+class SeasonsAdapter: ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>(DIFF_CALLBACK)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonViewHolder {
         val itemsSeasonDetailBinding = ItemSeasonsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -28,14 +22,12 @@ class SeasonsAdapter: RecyclerView.Adapter<SeasonsAdapter.SeasonViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: SeasonViewHolder, position: Int) {
-        val season = listSeason[position]
+        val season = getItem(position)
         holder.bind(season)
     }
 
-    override fun getItemCount(): Int = listSeason.size
-
     class SeasonViewHolder(private val binding: ItemSeasonsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(season: TvShowSeasonEntity) {
+        fun bind(season: SeasonEntity) {
             with(binding) {
                 "Season ${season.seasonNumber}".also { tvItemTitle.text = it }
                 "${season.airDate?.let { changeStringDateToYear(it) }} | ${season.episodeCount} Eps.".also { tvItemYear.text = it }
@@ -49,6 +41,18 @@ class SeasonsAdapter: RecyclerView.Adapter<SeasonsAdapter.SeasonViewHolder>() {
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                             .error(R.drawable.ic_error))
                     .into(imgPoster)
+            }
+        }
+    }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SeasonEntity>() {
+            override fun areItemsTheSame(oldItem: SeasonEntity, newItem: SeasonEntity): Boolean {
+                return oldItem.seasonId == newItem.seasonId
+            }
+
+            override fun areContentsTheSame(oldItem: SeasonEntity, newItem: SeasonEntity): Boolean {
+                return oldItem == newItem
             }
         }
     }

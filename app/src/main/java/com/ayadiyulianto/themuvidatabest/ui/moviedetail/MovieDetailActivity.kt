@@ -36,9 +36,9 @@ class MovieDetailActivity : AppCompatActivity() {
 
         val extras = intent.extras
         if (extras != null) {
-            val movieId = extras.getLong(EXTRA_MOVIE)
-            if (movieId != 0L) {
-                val movieDetails = movieDetailViewModel.getMovieDetail(movieId.toString())
+            val movieId = extras.getInt(EXTRA_MOVIE)
+            if (movieId != 0) {
+                val movieDetails = movieDetailViewModel.getMovieDetail(movieId)
                 movieDetails.observe(this, { res ->
                     when (res.status) {
                         Status.LOADING -> binding.contentMovieDetail.progressCircular.visibility =

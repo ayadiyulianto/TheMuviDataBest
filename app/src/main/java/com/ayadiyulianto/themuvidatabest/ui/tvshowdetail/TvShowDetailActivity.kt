@@ -1,8 +1,10 @@
 package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import com.google.android.material.snackbar.Snackbar
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
@@ -14,14 +16,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowDetailEntity
-import com.ayadiyulianto.themuvidatabest.di.Injection
+import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowEntity
 import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
+import com.ayadiyulianto.themuvidatabest.vo.Status
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TvShowDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTvShowDetailBinding
-    private lateinit var tvShowDetailViewModel: TvShowDetailViewModel
+    private val tvShowDetailViewModel: TvShowDetailViewModel by viewModels()
+    private lateinit var seasonAdapter: SeasonsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,34 +37,7 @@ class TvShowDetailActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        tvShowDetailViewModel = TvShowDetailViewModel(Injection.provideImdbRepository(this))
-
-        val extras = intent.extras
-        if (extras != null) {
-            val showId = extras.getLong(EXTRA_TV_SHOW)
-            if (showId != 0L) {
-                val showDetails = tvShowDetailViewModel.getTvShowDetail(showId.toString())
-                showDetails.observe(this, { tvShow ->
-                    showDetailTvShow(tvShow)
-                })
-            }
-        }
-
-        tvShowDetailViewModel.isLoading().observe(this, {
-            binding.contentTvShowDetail.progressCircular.visibility =
-                if (it) View.VISIBLE else View.GONE
-        })
-
-        binding.fabFavorite.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-    }
-
-    private fun showDetailTvShow(showDetails: TvShowDetailEntity) {
-        val listOfSeason = showDetails.seasons
-        val seasonAdapter = SeasonsAdapter()
-        seasonAdapter.setSeason(listOfSeason)
+        seasonAdapter = SeasonsAdapter()
 
         with(binding.contentTvShowDetail.rvSeasons) {
             layoutManager = LinearLayoutManager(context)
@@ -73,20 +51,61 @@ class TvShowDetailActivity : AppCompatActivity() {
             adapter = seasonAdapter
         }
 
+        val extras = intent.extras
+        if (extras != null) {
+            val showId = extras.getInt(EXTRA_TV_SHOW)
+            if (showId != 0) {
+                val showDetails = tvShowDetailViewModel.getTvShowDetail(showId)
+                showDetails.observe(this, { res ->
+                    when (res.status) {
+                        Status.LOADING -> binding.contentTvShowDetail.progressCircular.visibility =
+                            View.VISIBLE
+                        Status.SUCCESS -> {
+                            Log.e("result", res.data.toString())
+                            binding.contentTvShowDetail.progressCircular.visibility = View.GONE
+                            res.data?.let { showDetailTvShow(it) }
+                        }
+                        Status.ERROR -> {
+                            binding.contentTvShowDetail.progressCircular.visibility = View.GONE
+                            Toast.makeText(
+                                this,
+                                getString(R.string.error_while_getting_data),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                })
+                val showSeasons = tvShowDetailViewModel.getTvShowWithSeason(showId)
+                showSeasons.observe(this, { tvShowSeason ->
+                    seasonAdapter.submitList(tvShowSeason.mSeason)
+                })
+            }
+        }
+
+        binding.fabFavorite.setOnClickListener {
+            val newState = tvShowDetailViewModel.setFavorite()
+            if (newState) {
+                Toast.makeText(this, R.string.addedToFavorite, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, R.string.removedFromFavorite, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showDetailTvShow(showDetails: TvShowEntity) {
         with(binding) {
-            toolbarLayout.title = showDetails.name ?: showDetails.originalName
+            setFabIcon(showDetails.favorited ?: false)
+            toolbarLayout.title = showDetails.name
             tvShowBackdrop.alpha = 0.75F
-            contentTvShowDetail.tvShowTitle.text =
-                showDetails.name ?: showDetails.originalName
+            contentTvShowDetail.tvShowTitle.text = showDetails.name
             contentTvShowDetail.tvShowSinopsis.text = showDetails.overview
             contentTvShowDetail.tvShowReleaseDate.text =
-                changeStringToDateFormat(showDetails.releaseDate)
+                changeStringToDateFormat(showDetails.firstAirDate)
             contentTvShowDetail.tvShowRating.rating =
                 (showDetails.voteAverage?.toFloat() ?: 0F) / 2
             contentTvShowDetail.tvShowDuration.text =
-                showDetails.runtime?.get(0)?.let { Utils.changeMinuteToDurationFormat(it) }
-            contentTvShowDetail.tvShowGenres.text =
-                showDetails.genres?.joinToString(separator = " • ") ?: "-"
+                showDetails.runtime?.let { Utils.changeMinuteToDurationFormat(it) }
+            contentTvShowDetail.tvShowGenres.text = showDetails.genres
         }
 
         Glide.with(this)
@@ -106,7 +125,15 @@ class TvShowDetailActivity : AppCompatActivity() {
             )
             .into(binding.tvShowBackdrop)
 
-        showDetails.youtubeVideoIds?.get(0)?.let { setYTPlayer(it) }
+        showDetails.youtubeTrailerId?.let { setYTPlayer(it) }
+    }
+
+    private fun setFabIcon(isFavorited: Boolean) {
+        if (isFavorited) {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        } else {
+            binding.fabFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+        }
     }
 
     private fun setYTPlayer(videoId: String) {

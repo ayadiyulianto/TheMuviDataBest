@@ -15,8 +15,8 @@ class MovieDetailViewModel @Inject constructor(private val tmdbRepository: TmdbR
 
     private var movieData: LiveData<Resource<MovieEntity>> = MutableLiveData()
 
-    fun getMovieDetail(movieId: String): LiveData<Resource<MovieEntity>> {
-        movieData = tmdbRepository.getMovieDetail(movieId)
+    fun getMovieDetail(movieId: Int): LiveData<Resource<MovieEntity>> {
+        movieData = tmdbRepository.getMovieDetail(movieId.toString())
         return movieData
     }
 
