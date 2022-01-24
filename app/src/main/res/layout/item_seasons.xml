@@ -13,11 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
-        android:src="@drawable/poster_alita"
         android:adjustViewBounds="true"
         android:contentDescription="@string/poster"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        tools:src="@drawable/poster_alita"/>
 
     <TextView
         android:id="@+id/tv_item_title"

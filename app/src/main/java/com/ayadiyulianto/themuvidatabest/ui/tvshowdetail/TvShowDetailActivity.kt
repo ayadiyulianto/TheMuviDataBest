@@ -64,6 +64,11 @@ class TvShowDetailActivity : AppCompatActivity() {
                             Log.e("result", res.data.toString())
                             binding.contentTvShowDetail.progressCircular.visibility = View.GONE
                             res.data?.let { showDetailTvShow(it) }
+
+                            val showSeasons = tvShowDetailViewModel.getTvShowWithSeason(showId)
+                            showSeasons.observe(this, { tvShowSeason ->
+                                seasonAdapter.submitList(tvShowSeason.mSeason)
+                            })
                         }
                         Status.ERROR -> {
                             binding.contentTvShowDetail.progressCircular.visibility = View.GONE
@@ -74,10 +79,6 @@ class TvShowDetailActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
-                })
-                val showSeasons = tvShowDetailViewModel.getTvShowWithSeason(showId)
-                showSeasons.observe(this, { tvShowSeason ->
-                    seasonAdapter.submitList(tvShowSeason.mSeason)
                 })
             }
         }

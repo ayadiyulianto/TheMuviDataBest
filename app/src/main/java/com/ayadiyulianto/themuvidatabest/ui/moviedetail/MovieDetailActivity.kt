@@ -44,7 +44,7 @@ class MovieDetailActivity : AppCompatActivity() {
                         Status.LOADING -> binding.contentMovieDetail.progressCircular.visibility =
                             View.VISIBLE
                         Status.SUCCESS -> {
-                            Log.e("result", res.data.toString())
+                            Log.i("result", res.data.toString())
                             binding.contentMovieDetail.progressCircular.visibility = View.GONE
                             res.data?.let { showDetailMovie(it) }
                         }

@@ -37,7 +37,7 @@ class FavoritesFragment : Fragment() {
             viewPagerFavorite.adapter = tabsAdapter
             TabLayoutMediator(tabFavorite, viewPagerFavorite) { tab, pos ->
                 tab.text = resources.getString(TAB_TITLES[pos])
-            }
+            }.attach()
         }
     }
 

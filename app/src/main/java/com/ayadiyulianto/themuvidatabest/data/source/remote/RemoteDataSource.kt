@@ -76,7 +76,7 @@ class RemoteDataSource {
         CoroutineScope(IO).launch {
             try {
                 val response =
-                    ApiConfig.getApiService().getMovieDetail(movieId, API_KEY, language).await()
+                    ApiConfig.getApiService().getMovieDetail(movieId, API_KEY, language, "videos").await()
                 resultsItemMovie.postValue(ApiResponse.success(response))
             } catch (e: IOException) {
                 Log.e("getMovie Error", e.message.toString())
@@ -98,7 +98,7 @@ class RemoteDataSource {
         CoroutineScope(IO).launch {
             try {
                 val response =
-                    ApiConfig.getApiService().getTvShowDetail(showId, API_KEY, language).await()
+                    ApiConfig.getApiService().getTvShowDetail(showId, API_KEY, language, "videos").await()
                 resultsItemTvShow.postValue(ApiResponse.success(response))
             } catch (e: IOException) {
                 Log.e("getMovie Error", e.message.toString())

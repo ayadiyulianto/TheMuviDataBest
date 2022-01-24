@@ -20,13 +20,15 @@
         android:theme="@style/Theme.TheMuviDataBest">
         <activity
             android:name=".ui.search.SearchActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.TheMuviDataBest.NoTranslucentStatus"/>
         <activity
             android:name=".ui.tvshowdetail.TvShowDetailActivity"
             android:exported="false"
             android:label="@string/title_activity_tv_show_detail"
-            android:parentActivityName=".ui.main.MainActivity"
-            android:theme="@style/Theme.TheMuviDataBest.NoActionBar" />
+            android:parentActivityName=".ui.main.MainActivity" />
         <activity
             android:name=".ui.moviedetail.MovieDetailActivity"
             android:exported="false"

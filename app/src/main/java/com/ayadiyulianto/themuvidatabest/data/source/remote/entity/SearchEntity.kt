@@ -1,5 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.data.source.remote.entity
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class SearchEntity(
     val id: Long?,
     val name: String?,
@@ -9,4 +13,4 @@ data class SearchEntity(
     val overview: String?,
     val voteAverage: Double?,
     val releaseOrAirDate: String?
-)
+): Parcelable
