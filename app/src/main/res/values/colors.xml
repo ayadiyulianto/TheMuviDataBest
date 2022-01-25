@@ -8,4 +8,5 @@
     <color name="grey_500">#757575</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="indigo_500_transparent">#803F51B5</color>
 </resources>

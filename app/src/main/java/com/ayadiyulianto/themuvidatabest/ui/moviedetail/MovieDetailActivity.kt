@@ -73,7 +73,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
     private fun showDetailMovie(movieDetails: MovieEntity) {
         with(binding) {
-            setFabIcon(movieDetails.favorited ?: false)
+            setFabIcon(movieDetails.favorited)
             toolbarLayout.title = movieDetails.title
             movieBackdrop.alpha = 0.75F
             contentMovieDetail.movieTitle.text = movieDetails.title

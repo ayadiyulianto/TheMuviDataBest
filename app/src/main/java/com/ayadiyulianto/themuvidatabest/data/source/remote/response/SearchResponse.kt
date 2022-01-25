@@ -20,7 +20,7 @@ data class SearchResponse(
 data class SearchResultsItem(
 
     @field:SerializedName("id")
-    val id: Long? = null,
+    val id: Int = 0,
 
     @field:SerializedName("title")
     val title: String? = null,

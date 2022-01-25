@@ -43,53 +43,13 @@ class TmdbRepository private constructor(
             }
     }
 
-    override fun getSearchResult(title: String): LiveData<List<SearchEntity>> {
-        _isLoading.value = true
-        val listOfResult = MutableLiveData<List<SearchEntity>>()
-        CoroutineScope(IO).launch {
-            remoteDataSource.getSearchResult(
-                title,
-                object : RemoteDataSource.CallbackLoadSearchResult {
-                    override fun onSearchResultRecieved(showResponse: List<SearchResultsItem?>?) {
-                        val res = ArrayList<SearchEntity>()
-                        if (showResponse != null) {
-                            for (responseSearch in showResponse) {
-                                if (responseSearch != null) {
-                                    if (responseSearch.mediaType == "tv" || responseSearch.mediaType == "movie") {
-                                        //for return result
-                                        val resSearch = SearchEntity(
-                                            responseSearch.id,
-                                            if (responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
-                                            "$imageBaseUrl${responseSearch.posterPath}",
-                                            "$imageBaseUrl${responseSearch.backdropPath}",
-                                            responseSearch.mediaType,
-                                            responseSearch.overview,
-                                            responseSearch.voteAverage,
-                                            if (responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
-                                        )
-
-                                        if (!res.contains(resSearch)) {
-                                            res.add(resSearch)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        _isLoading.postValue(false)
-                        listOfResult.postValue(res)
-                    }
-                })
-        }
-        return listOfResult
-    }
-
     override fun getDiscoverMovies(): LiveData<Resource<PagedList<MovieEntity>>> {
         return object :
             NetworkBoundResource<PagedList<MovieEntity>, List<ResultsItemMovie>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(15)
+                    .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
                 return LivePagedListBuilder(localDataSource.getAllMovies(), config).build()
@@ -164,31 +124,13 @@ class TmdbRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(15)
-            .setPageSize(10)
-            .build()
-        return LivePagedListBuilder(localDataSource.getFavoriteMovie(), config).build()
-    }
-
-    override fun getFavoriteTvShow(): LiveData<PagedList<TvShowEntity>> {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(15)
-            .setPageSize(10)
-            .build()
-        return LivePagedListBuilder(localDataSource.getFavoriteTvShow(), config).build()
-    }
-
     override fun getDiscoverTvShow(): LiveData<Resource<PagedList<TvShowEntity>>> {
         return object :
             NetworkBoundResource<PagedList<TvShowEntity>, List<ResultsItemTvShow>>(appExecutors) {
             public override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
                 val config = PagedList.Config.Builder().apply {
                     setEnablePlaceholders(false)
-                    setInitialLoadSizeHint(15)
+                    setInitialLoadSizeHint(10)
                     setPageSize(10)
                 }.build()
                 return LivePagedListBuilder(localDataSource.getAllTvShow(), config).build()
@@ -211,6 +153,8 @@ class TmdbRepository private constructor(
                         "$imageBaseUrl${response.backdropPath}",
                         response.voteAverage,
                         response.firstAirDate,
+                        null,
+                        null
                     )
                     shows.add(show)
                 }
@@ -218,9 +162,6 @@ class TmdbRepository private constructor(
             }
         }.asLiveData()
     }
-
-    override fun getTvShowWithSeason(showId: String): LiveData<TvShowWithSeason> =
-        localDataSource.getTvShowWithSeason(showId)
 
     override fun getTvShowDetail(showId: String): LiveData<Resource<TvShowEntity>> {
         return object : NetworkBoundResource<TvShowEntity, TvShowDetailResponse>(appExecutors) {
@@ -272,13 +213,35 @@ class TmdbRepository private constructor(
                     data.voteAverage,
                     data.firstAirDate,
                     JSONArray(listOfGenre).toString(),
-                    data.episodeRunTime?.get(0)
+                    data.episodeRunTime?.get(0),
+                    data.videos?.getYoutubeTrailerId()
                 )
                 //using insert for add search result into db, and use the data for show later
                 localDataSource.insertTvShow(arrayListOf(show))
                 localDataSource.insertSeason(listOfSeason)
             }
         }.asLiveData()
+    }
+
+    override fun getTvShowWithSeason(showId: String): LiveData<TvShowWithSeason> =
+        localDataSource.getTvShowWithSeason(showId)
+
+    override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(10)
+            .setPageSize(10)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavoriteMovie(), config).build()
+    }
+
+    override fun getFavoriteTvShow(): LiveData<PagedList<TvShowEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(10)
+            .setPageSize(10)
+            .build()
+        return LivePagedListBuilder(localDataSource.getFavoriteTvShow(), config).build()
     }
 
     override fun setFavoriteMovie(movie: MovieEntity, newState: Boolean) {
@@ -291,5 +254,84 @@ class TmdbRepository private constructor(
         CoroutineScope(IO).launch {
             localDataSource.setTvShowFavorite(tvShow, newState)
         }
+    }
+
+    override fun getSearchResult(title: String): LiveData<List<SearchEntity>> {
+        _isLoading.value = true
+        val listOfResult = MutableLiveData<List<SearchEntity>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getSearchResult(
+                title,
+                object : RemoteDataSource.CallbackLoadSearchResult {
+                    override fun onSearchResultRecieved(showResponse: List<SearchResultsItem?>?) {
+                        val res = ArrayList<SearchEntity>()
+                        if (showResponse != null) {
+                            for (responseSearch in showResponse) {
+                                if (responseSearch != null) {
+                                    if (responseSearch.mediaType == "tv" || responseSearch.mediaType == "movie") {
+                                        //for return result
+                                        val resSearch = SearchEntity(
+                                            responseSearch.id,
+                                            if (responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
+                                            "$imageBaseUrl${responseSearch.posterPath}",
+                                            "$imageBaseUrl${responseSearch.backdropPath}",
+                                            responseSearch.mediaType,
+                                            responseSearch.overview,
+                                            responseSearch.voteAverage,
+                                            if (responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
+                                        )
+
+                                        if (!res.contains(resSearch)) {
+                                            res.add(resSearch)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _isLoading.postValue(false)
+                        listOfResult.postValue(res)
+                    }
+                })
+        }
+        return listOfResult
+    }
+
+    override fun getTrendings(): LiveData<List<SearchEntity>> {
+        _isLoading.value = true
+        val listOfResult = MutableLiveData<List<SearchEntity>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getTrendings(
+                object : RemoteDataSource.CallbackLoadTrendings {
+                    override fun onTrendingsRecieved(showResponse: List<SearchResultsItem?>?) {
+                        val res = ArrayList<SearchEntity>()
+                        if (showResponse != null) {
+                            for (responseSearch in showResponse) {
+                                if (responseSearch != null) {
+                                    if (responseSearch.mediaType == "tv" || responseSearch.mediaType == "movie") {
+                                        //for return result
+                                        val resSearch = SearchEntity(
+                                            responseSearch.id,
+                                            if (responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
+                                            "$imageBaseUrl${responseSearch.posterPath}",
+                                            "$imageBaseUrl${responseSearch.backdropPath}",
+                                            responseSearch.mediaType,
+                                            responseSearch.overview,
+                                            responseSearch.voteAverage,
+                                            if (responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
+                                        )
+
+                                        if (!res.contains(resSearch)) {
+                                            res.add(resSearch)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _isLoading.postValue(false)
+                        listOfResult.postValue(res)
+                    }
+                })
+        }
+        return listOfResult
     }
 }

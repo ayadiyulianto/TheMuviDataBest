@@ -76,7 +76,8 @@ class RemoteDataSource {
         CoroutineScope(IO).launch {
             try {
                 val response =
-                    ApiConfig.getApiService().getMovieDetail(movieId, API_KEY, language, "videos").await()
+                    ApiConfig.getApiService().getMovieDetail(movieId, API_KEY, language, "videos")
+                        .await()
                 resultsItemMovie.postValue(ApiResponse.success(response))
             } catch (e: IOException) {
                 Log.e("getMovie Error", e.message.toString())
@@ -98,10 +99,11 @@ class RemoteDataSource {
         CoroutineScope(IO).launch {
             try {
                 val response =
-                    ApiConfig.getApiService().getTvShowDetail(showId, API_KEY, language, "videos").await()
+                    ApiConfig.getApiService().getTvShowDetail(showId, API_KEY, language, "videos")
+                        .await()
                 resultsItemTvShow.postValue(ApiResponse.success(response))
             } catch (e: IOException) {
-                Log.e("getMovie Error", e.message.toString())
+                Log.e("getTvShow Error", e.message.toString())
                 resultsItemTvShow.postValue(
                     ApiResponse.error(
                         e.message.toString(),
@@ -118,16 +120,33 @@ class RemoteDataSource {
         EspressoIdlingResource.increment()
         ApiConfig.getApiService().getSearchResult(API_KEY, language, title, "1")
             .await().results.let { listResult ->
-            callback.onSearchResultRecieved(
-                (
-                        listResult
-                        )
-            )
-            EspressoIdlingResource.decrement()
-        }
+                callback.onSearchResultRecieved(
+                    (
+                            listResult
+                            )
+                )
+                EspressoIdlingResource.decrement()
+            }
+    }
+
+    suspend fun getTrendings(callback: CallbackLoadTrendings) {
+        EspressoIdlingResource.increment()
+        ApiConfig.getApiService().getTrendings(API_KEY)
+            .await().results.let { listResult ->
+                callback.onTrendingsRecieved(
+                    (
+                            listResult
+                            )
+                )
+                EspressoIdlingResource.decrement()
+            }
     }
 
     interface CallbackLoadSearchResult {
         fun onSearchResultRecieved(showResponse: List<SearchResultsItem?>?)
+    }
+
+    interface CallbackLoadTrendings {
+        fun onTrendingsRecieved(showResponse: List<SearchResultsItem?>?)
     }
 }

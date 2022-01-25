@@ -42,4 +42,9 @@ interface ApiService {
         @Query("query") query: String,
         @Query("page") page: String
     ): Call<SearchResponse>
+
+    @GET("trending/all/week")
+    fun getTrendings(
+        @Query("api_key") api_key: String?
+    ): Call<SearchResponse>
 }

@@ -14,10 +14,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
-class SeasonsAdapter: ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>(DIFF_CALLBACK)  {
+class SeasonsAdapter : ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonViewHolder {
-        val itemsSeasonDetailBinding = ItemSeasonsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemsSeasonDetailBinding =
+            ItemSeasonsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SeasonViewHolder(itemsSeasonDetailBinding)
     }
 
@@ -26,12 +27,21 @@ class SeasonsAdapter: ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>
         holder.bind(season)
     }
 
-    class SeasonViewHolder(private val binding: ItemSeasonsBinding) : RecyclerView.ViewHolder(binding.root) {
+    class SeasonViewHolder(private val binding: ItemSeasonsBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(season: SeasonEntity) {
             with(binding) {
                 "Season ${season.seasonNumber}".also { tvItemTitle.text = it }
-                "${season.airDate?.let { changeStringDateToYear(it) }} | ${season.episodeCount} Eps.".also { tvItemYear.text = it }
-                "Season ${season.seasonNumber} premiered on ${season.airDate?.let { changeStringToDateFormat(it) }}.".also { tvItemPremiere.text = it }
+                "${season.airDate?.let { changeStringDateToYear(it) }} | ${season.episodeCount} Eps.".also {
+                    tvItemYear.text = it
+                }
+                "Season ${season.seasonNumber} premiered on ${
+                    season.airDate?.let {
+                        changeStringToDateFormat(
+                            it
+                        )
+                    }
+                }.".also { tvItemPremiere.text = it }
                 season.overview.also { tvItemDescription.text = it }
 
                 Glide.with(itemView.context)
@@ -39,7 +49,8 @@ class SeasonsAdapter: ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>
                     .transform(RoundedCorners(16))
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
-                            .error(R.drawable.ic_error))
+                            .error(R.drawable.ic_error)
+                    )
                     .into(imgPoster)
             }
         }

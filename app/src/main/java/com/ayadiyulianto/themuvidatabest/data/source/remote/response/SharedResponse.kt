@@ -55,6 +55,13 @@ data class VideosItem(
 )
 
 fun VideoResults.getYoutubeTrailerId(): String? {
-    val ytVideos = this.results?.filter { it.site == "YouTube" && it.type == "Trailer" }
-    return ytVideos?.get(0)?.key
+    val ytTrailer = this.results?.filter { it.site == "YouTube" && it.type == "Trailer" }
+    if (ytTrailer != null && ytTrailer.isNotEmpty()) {
+        return ytTrailer[0].key
+    }
+    val ytVideo = this.results?.filter { it.site == "YouTube" }
+    if (ytVideo != null && ytVideo.isNotEmpty()) {
+        return ytVideo[0].key
+    }
+    return null
 }

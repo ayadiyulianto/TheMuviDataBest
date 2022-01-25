@@ -23,16 +23,17 @@
         "seams, divides space, and indicates moving parts.\n\n"
     </string>
     <string name="poster">Poster</string>
-    <string name="dummy_title">Alita Battle Angel</string>
-    <string name="dummy_date">Dec 11, 2021</string>
+    <string name="dummy_title">Movie / Tv Show Title</string>
+    <string name="dummy_date">Jan 01, 2021</string>
     <string name="title_activity_tv_show_detail">Tv Show Detail</string>
-    <string name="dummy_duration">2 h 10 m</string>
-    <string name="dummy_genre">Action, Adventure, Fantasy, Sci-Fi</string>
+    <string name="dummy_duration">0 h 0 m</string>
+    <string name="dummy_genre">Movie / Tv Shows Genres</string>
     <string name="videos">Videos</string>
-    <string name="error_while_getting_data">Terjadi kesalahan saat mengambil data</string>
-    <string name="addedToFavorite">Berhasil menambahkan ke daftar favorit</string>
-    <string name="removedFromFavorite">Berhasil menghapus dari daftar favorit</string>
+    <string name="error_while_getting_data">Error while getting data</string>
+    <string name="addedToFavorite">Added to favorites</string>
+    <string name="removedFromFavorite">Removed from favorites</string>
     <string name="title_activity_search">Search Movie or TV Show</string>
     <string name="search_hint">Search movie or tv show by title …</string>
-    <string name="search_title">Search title …</string>
+    <string name="search_title">Search …</string>
+    <string name="trending_this_week">Trending this Week!</string>
 </resources>

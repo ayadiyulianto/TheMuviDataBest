@@ -7,28 +7,44 @@
     tools:context=".ui.search.SearchActivity">
 
     <View
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.mancj.materialsearchbar.MaterialSearchBar
-        android:id="@+id/searchBar"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/img_hot"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:mt_hint="@string/search_hint"
-        app:mt_maxSuggestionsCount="10"
-        app:mt_navIconEnabled="true"
-        app:mt_placeholder="@string/search_title"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:src="@drawable/ic_baseline_local_fire_department_24"
+        android:contentDescription="@string/trending_this_week"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/app_bar"
+        app:layout_constraintBottom_toTopOf="@id/rv_trending"
+        app:tint="?attr/colorAccent" />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/rv_trending"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/searchBar"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"/>-->
+    <TextView
+        android:id="@+id/txt_trendings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/trending_this_week"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/img_hot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_hot"
+        app:layout_constraintBottom_toBottomOf="@id/img_hot"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_trending"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/img_hot"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/item_movies_tvshows"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progress_circular"
@@ -40,5 +56,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/bg_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/indigo_500_transparent"
+        android:visibility="gone"/>
+
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:mt_hint="@string/search_hint"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_navIconEnabled="true"
+        app:mt_placeholder="@string/search_title"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

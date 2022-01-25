@@ -1,5 +1,6 @@
 package com.ayadiyulianto.themuvidatabest.ui.main
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
@@ -19,6 +20,8 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.hamcrest.Matcher
+import org.hamcrest.Matchers.allOf
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class MainActivityTest {
@@ -138,18 +141,26 @@ class MainActivityTest {
     fun loadMovieFavoritePage() {
         onView(withId(R.id.container)).perform(swipeUp())
 
-        onView(withId(R.id.navigation_movies)).perform(click())
-        onView(withId(R.id.tab_favorite)).perform(click())
+        onView(withId(R.id.navigation_favorites)).perform(click())
+        val matcher: Matcher<View> = allOf(
+            withText(R.string.movie),
+            isDescendantOfA(withId(R.id.tab_favorite))
+        )
+        onView(matcher).perform(click())
         onView(withId(R.id.rv_favorite_movies)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_favorite_movies)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
     }
 
     @Test
-    fun loadShowFavoritePage() {
+    fun loadTvShowFavoritePage() {
         onView(withId(R.id.container)).perform(swipeUp())
 
-        onView(withId(R.id.navigation_tvshows)).perform(click())
-        onView(withId(R.id.tab_favorite)).perform(click()) //still don't know how to choose the tabs
+        onView(withId(R.id.navigation_favorites)).perform(click())
+        val matcher: Matcher<View> = allOf(
+            withText(R.string.tv_show),
+            isDescendantOfA(withId(R.id.tab_favorite))
+        )
+        onView(matcher).perform(click())
         onView(withId(R.id.rv_favorite_shows)).check(matches(isDisplayed()))
         onView(withId(R.id.rv_favorite_shows)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
     }

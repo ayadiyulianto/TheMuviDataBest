@@ -11,6 +11,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
     ViewModel() {
 
+    fun getTrendings(): LiveData<List<SearchEntity>> = tmdbRepository.getTrendings()
+
     fun getSearchResult(title: String): LiveData<List<SearchEntity>> =
         tmdbRepository.getSearchResult(title)
 

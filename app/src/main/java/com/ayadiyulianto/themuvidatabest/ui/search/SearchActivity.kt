@@ -7,9 +7,9 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.databinding.ActivitySearchBinding
 import com.mancj.materialsearchbar.MaterialSearchBar
-import com.mancj.materialsearchbar.adapter.SuggestionsAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +25,26 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initSearch()
+
+        val trendingsAdapter = TrendingsAdapter()
+
+        searchViewModel.getTrendings().observe(this, { trends ->
+            trendingsAdapter.submitList(trends)
+        })
+
+        searchViewModel.getLoading().observe(this, {
+            if (it) {
+                binding.progressCircular.visibility = View.VISIBLE
+            } else {
+                binding.progressCircular.visibility = View.GONE
+            }
+        })
+
+        with(binding.rvTrending) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = trendingsAdapter
+        }
     }
 
     private fun initSearch() {
@@ -34,7 +54,9 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchBar.setOnSearchActionListener(object :
             MaterialSearchBar.OnSearchActionListener {
-            override fun onSearchStateChanged(enabled: Boolean) {}
+            override fun onSearchStateChanged(enabled: Boolean) {
+                binding.bgSearch.visibility = if (enabled) View.VISIBLE else View.GONE
+            }
 
             override fun onSearchConfirmed(text: CharSequence) {
                 //startSearch(text.toString(), true, null, true);
@@ -56,23 +78,13 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.addTextChangeListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                binding.searchBar.setCustomSuggestionAdapter(searchAdapter)
 
                 if (binding.searchBar.text.isNotEmpty()) {
                     val results = searchViewModel.getSearchResult(binding.searchBar.text)
 
-                    results.observe(this@SearchActivity, { detail ->
-                        searchAdapter.suggestions = detail
-                        searchAdapter.notifyDataSetChanged()
+                    results.observe(this@SearchActivity, { res ->
+                        searchAdapter.suggestions = res
                         binding.searchBar.showSuggestionsList()
-                    })
-
-                    searchViewModel.getLoading().observe(this@SearchActivity, {
-                        if (it) {
-                            binding.progressCircular.visibility = View.VISIBLE
-                        } else {
-                            binding.progressCircular.visibility = View.GONE
-                        }
                     })
                 } else {
                     binding.searchBar.clearSuggestions()
@@ -81,12 +93,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable) {}
-        })
-
-        binding.searchBar.setSuggestionsClickListener(object :
-            SuggestionsAdapter.OnItemViewClickListener {
-            override fun OnItemClickListener(position: Int, v: View) {}
-            override fun OnItemDeleteListener(position: Int, v: View) {}
         })
     }
 }

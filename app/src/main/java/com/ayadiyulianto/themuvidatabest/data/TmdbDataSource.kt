@@ -19,4 +19,5 @@ interface TmdbDataSource {
     fun setFavoriteMovie(movie: MovieEntity, newState: Boolean)
     fun setFavoriteTvShow(tvShow: TvShowEntity, newState: Boolean)
     fun getSearchResult(title: String): LiveData<List<SearchEntity>>
+    fun getTrendings(): LiveData<List<SearchEntity>>
 }

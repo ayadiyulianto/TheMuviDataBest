@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SearchEntity(
-    val id: Long?,
+    val id: Int,
     val name: String?,
     val posterPath: String?,
     val backdropPath: String?,

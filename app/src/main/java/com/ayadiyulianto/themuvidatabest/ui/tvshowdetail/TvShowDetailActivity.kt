@@ -61,13 +61,17 @@ class TvShowDetailActivity : AppCompatActivity() {
                         Status.LOADING -> binding.contentTvShowDetail.progressCircular.visibility =
                             View.VISIBLE
                         Status.SUCCESS -> {
-                            Log.e("result", res.data.toString())
+                            Log.i("result", res.data.toString())
                             binding.contentTvShowDetail.progressCircular.visibility = View.GONE
                             res.data?.let { showDetailTvShow(it) }
 
                             val showSeasons = tvShowDetailViewModel.getTvShowWithSeason(showId)
                             showSeasons.observe(this, { tvShowSeason ->
-                                seasonAdapter.submitList(tvShowSeason.mSeason)
+                                if (tvShowSeason != null) {
+                                    showDetailTvShow(tvShowSeason.mTvShow)
+                                    seasonAdapter.submitList(tvShowSeason.mSeason)
+                                    // binding.contentTvShowDetail.cvSeasons.requestLayout()
+                                }
                             })
                         }
                         Status.ERROR -> {
@@ -95,7 +99,7 @@ class TvShowDetailActivity : AppCompatActivity() {
 
     private fun showDetailTvShow(showDetails: TvShowEntity) {
         with(binding) {
-            setFabIcon(showDetails.favorited ?: false)
+            setFabIcon(showDetails.favorited)
             toolbarLayout.title = showDetails.name
             tvShowBackdrop.alpha = 0.75F
             contentTvShowDetail.tvShowTitle.text = showDetails.name

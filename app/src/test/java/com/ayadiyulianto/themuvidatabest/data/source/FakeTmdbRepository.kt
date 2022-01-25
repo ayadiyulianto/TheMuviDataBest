@@ -32,7 +32,7 @@ class FakeTmdbRepository constructor(
             public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(15)
+                    .setInitialLoadSizeHint(10)
                     .setPageSize(10)
                     .build()
                 return LivePagedListBuilder(localDataSource.getAllMovies(), config).build()
@@ -101,7 +101,7 @@ class FakeTmdbRepository constructor(
     override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(15)
+            .setInitialLoadSizeHint(10)
             .setPageSize(10)
             .build()
         return LivePagedListBuilder(localDataSource.getFavoriteMovie(), config).build()
@@ -110,7 +110,7 @@ class FakeTmdbRepository constructor(
     override fun getFavoriteTvShow(): LiveData<PagedList<TvShowEntity>> {
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(15)
+            .setInitialLoadSizeHint(10)
             .setPageSize(10)
             .build()
         return LivePagedListBuilder(localDataSource.getFavoriteTvShow(), config).build()
@@ -121,7 +121,7 @@ class FakeTmdbRepository constructor(
             public override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
                 val config = PagedList.Config.Builder().apply {
                     setEnablePlaceholders(false)
-                    setInitialLoadSizeHint(15)
+                    setInitialLoadSizeHint(10)
                     setPageSize(10)
                 }.build()
                 return LivePagedListBuilder(localDataSource.getAllTvShow(), config).build()
@@ -255,4 +255,42 @@ class FakeTmdbRepository constructor(
         return listOfResult
     }
 
+    override fun getTrendings(): LiveData<List<SearchEntity>> {
+        _isLoading.value = true
+        val listOfResult = MutableLiveData<List<SearchEntity>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getTrendings(
+                object : RemoteDataSource.CallbackLoadTrendings {
+                    override fun onTrendingsRecieved(showResponse: List<SearchResultsItem?>?) {
+                        val res = ArrayList<SearchEntity>()
+                        if (showResponse != null) {
+                            for (responseSearch in showResponse) {
+                                if (responseSearch != null) {
+                                    if (responseSearch.mediaType == "tv" || responseSearch.mediaType == "movie") {
+                                        //for return result
+                                        val resSearch = SearchEntity(
+                                            responseSearch.id,
+                                            if (responseSearch.mediaType == "tv") responseSearch.name else responseSearch.title,
+                                            responseSearch.posterPath,
+                                            responseSearch.backdropPath,
+                                            responseSearch.mediaType,
+                                            responseSearch.overview,
+                                            responseSearch.voteAverage,
+                                            if (responseSearch.mediaType == "tv") responseSearch.firstAirDate else responseSearch.releaseDate
+                                        )
+
+                                        if (!res.contains(resSearch)) {
+                                            res.add(resSearch)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        _isLoading.postValue(false)
+                        listOfResult.postValue(res)
+                    }
+                })
+        }
+        return listOfResult
+    }
 }
