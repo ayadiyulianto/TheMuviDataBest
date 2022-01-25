@@ -89,8 +89,8 @@ class TmdbRepository private constructor(
             public override fun loadFromDB(): LiveData<PagedList<MovieEntity>> {
                 val config = PagedList.Config.Builder()
                     .setEnablePlaceholders(false)
-                    .setInitialLoadSizeHint(4)
-                    .setPageSize(4)
+                    .setInitialLoadSizeHint(15)
+                    .setPageSize(10)
                     .build()
                 return LivePagedListBuilder(localDataSource.getAllMovies(), config).build()
             }
@@ -167,8 +167,8 @@ class TmdbRepository private constructor(
     override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(4)
-            .setPageSize(4)
+            .setInitialLoadSizeHint(15)
+            .setPageSize(10)
             .build()
         return LivePagedListBuilder(localDataSource.getFavoriteMovie(), config).build()
     }
@@ -176,8 +176,8 @@ class TmdbRepository private constructor(
     override fun getFavoriteTvShow(): LiveData<PagedList<TvShowEntity>> {
         val config = PagedList.Config.Builder()
             .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(4)
-            .setPageSize(4)
+            .setInitialLoadSizeHint(15)
+            .setPageSize(10)
             .build()
         return LivePagedListBuilder(localDataSource.getFavoriteTvShow(), config).build()
     }
@@ -188,8 +188,8 @@ class TmdbRepository private constructor(
             public override fun loadFromDB(): LiveData<PagedList<TvShowEntity>> {
                 val config = PagedList.Config.Builder().apply {
                     setEnablePlaceholders(false)
-                    setInitialLoadSizeHint(4)
-                    setPageSize(4)
+                    setInitialLoadSizeHint(15)
+                    setPageSize(10)
                 }.build()
                 return LivePagedListBuilder(localDataSource.getAllTvShow(), config).build()
             }

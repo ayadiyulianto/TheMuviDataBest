@@ -44,7 +44,7 @@ class MovieDetailViewModelTest {
         `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(movieDummy)
 
         val observer = mock(Observer::class.java) as Observer<Resource<MovieEntity>>
-        viewModel.getMovieDetail(movieId.toString()).observeForever(observer)
+        viewModel.getMovieDetail(movieId).observeForever(observer)
         verify(observer).onChanged(resource)
     }
 

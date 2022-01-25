@@ -1,7 +1,6 @@
 package com.ayadiyulianto.themuvidatabest.util
 
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.*
-import com.ayadiyulianto.themuvidatabest.data.source.remote.response.*
 
 object DataDummy {
 
@@ -160,8 +159,7 @@ object DataDummy {
                 "2021-03-19",
                 1,
                 6,
-                "/fIT6Y6O3cUX1X8qY8pZgzEvxUDQ.jpg",
-                false
+                "/fIT6Y6O3cUX1X8qY8pZgzEvxUDQ.jpg"
             )
         )
 

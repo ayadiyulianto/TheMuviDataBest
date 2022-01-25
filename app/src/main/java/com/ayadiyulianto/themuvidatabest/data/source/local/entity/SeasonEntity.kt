@@ -41,8 +41,5 @@ data class SeasonEntity(
     var episodeCount: Int? = 0,
 
     @ColumnInfo(name = "posterPath")
-    var posterPath: String? = "",
-
-    @ColumnInfo(name = "favorited")
-    var favorited: Boolean? = false
+    var posterPath: String? = ""
 )

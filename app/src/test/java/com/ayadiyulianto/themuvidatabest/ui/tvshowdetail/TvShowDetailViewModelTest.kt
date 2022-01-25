@@ -46,7 +46,7 @@ class TvShowDetailViewModelTest {
         Mockito.`when`(tmdbRepository.getTvShowDetail(showId.toString())).thenReturn(showDetailDummy)
 
         val observer = Mockito.mock(Observer::class.java) as Observer<Resource<TvShowEntity>>
-        viewModel.getTvShowDetail(showId.toString()).observeForever(observer)
+        viewModel.getTvShowDetail(showId).observeForever(observer)
         Mockito.verify(observer).onChanged(resource)
     }
 
@@ -57,7 +57,7 @@ class TvShowDetailViewModelTest {
         Mockito.`when`(tmdbRepository.getTvShowWithSeason(showId.toString())).thenReturn(showDetailDummy)
 
         val observer = Mockito.mock(Observer::class.java) as Observer<TvShowWithSeason>
-        viewModel.getTvShowWithSeason(showId.toString()).observeForever(observer)
+        viewModel.getTvShowWithSeason(showId).observeForever(observer)
     }
 
     @Test

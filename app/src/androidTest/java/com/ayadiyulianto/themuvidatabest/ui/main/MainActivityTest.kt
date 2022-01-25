@@ -2,6 +2,7 @@ package com.ayadiyulianto.themuvidatabest.ui.main
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
@@ -89,5 +90,67 @@ class MainActivityTest {
         onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.rv_seasons)).check(matches(isDisplayed()))
         onView(withId(R.id.ytPlayerView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun testAddAndRemoveFavoriteMovie(){
+        onView(withId(R.id.container)).perform(swipeUp())
+
+        onView(withId(R.id.navigation_movies)).perform(click())
+        onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        //Update Current Status favorite
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).perform(click())
+
+        Espresso.pressBack()
+        onView(withId(R.id.rv_movies)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        //Re-update the status again so now the status back to first condition before update
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).perform(click())
+
+        Espresso.pressBack()
+    }
+
+    @Test
+    fun testAddAndRemoveFavoriteTvShow(){
+        onView(withId(R.id.container)).perform(swipeUp())
+
+        onView(withId(R.id.navigation_tvshows)).perform(click())
+        onView(withId(R.id.rv_tvshows)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        //Update Current Status favorite
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).perform(click())
+
+        Espresso.pressBack()
+        onView(withId(R.id.rv_tvshows)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        //Re-update the status again so now the status back to first condition before update
+        onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.fabFavorite)).perform(click())
+
+        Espresso.pressBack()
+    }
+
+    @Test
+    fun loadMovieFavoritePage() {
+        onView(withId(R.id.container)).perform(swipeUp())
+
+        onView(withId(R.id.navigation_movies)).perform(click())
+        onView(withId(R.id.tab_favorite)).perform(click())
+        onView(withId(R.id.rv_favorite_movies)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_favorite_movies)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
+    }
+
+    @Test
+    fun loadShowFavoritePage() {
+        onView(withId(R.id.container)).perform(swipeUp())
+
+        onView(withId(R.id.navigation_tvshows)).perform(click())
+        onView(withId(R.id.tab_favorite)).perform(click()) //still don't know how to choose the tabs
+        onView(withId(R.id.rv_favorite_shows)).check(matches(isDisplayed()))
+        onView(withId(R.id.rv_favorite_shows)).perform(RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(0))
     }
 }

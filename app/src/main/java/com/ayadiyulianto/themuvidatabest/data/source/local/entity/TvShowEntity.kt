@@ -39,6 +39,7 @@ data class TvShowEntity(
     @ColumnInfo(name = "youtubeTrailerId")
     val youtubeTrailerId: String? = null,
 
+    @NonNull
     @ColumnInfo(name = "favorited")
-    var favorited: Boolean? = false
+    var favorited: Boolean = false
 )
