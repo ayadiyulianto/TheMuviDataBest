@@ -141,7 +141,6 @@ object DataDummy {
                 ).toString(),
                 50,
             )
-
         )
 
         return detailTvShows

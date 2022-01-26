@@ -2,9 +2,9 @@ package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowEntity
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowWithSeason
 import com.ayadiyulianto.themuvidatabest.vo.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,23 +14,24 @@ import javax.inject.Inject
 class TvShowDetailViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
     ViewModel() {
 
-    private var tvShowData: LiveData<Resource<TvShowEntity>> = MutableLiveData()
+    val tvShowId = MutableLiveData<String>()
 
-    fun getTvShowDetail(showId: Int): LiveData<Resource<TvShowEntity>> {
-        tvShowData = tmdbRepository.getTvShowDetail(showId.toString())
-        return tvShowData
+    fun setSelectedTvShow(courseId: Int) {
+        this.tvShowId.value = courseId.toString()
     }
 
-    fun getTvShowWithSeason(showId: Int): LiveData<TvShowWithSeason> =
-        tmdbRepository.getTvShowWithSeason(showId.toString())
+    var tvShowWithSeason: LiveData<Resource<TvShowWithSeason>> = Transformations.switchMap(tvShowId) { showId ->
+        tmdbRepository.getTvShowWithSeason(showId)
+    }
 
     fun setFavorite(): Boolean {
-        val tvShowResource = tvShowData.value
+        val tvShowResource = tvShowWithSeason.value
         if (tvShowResource != null) {
-            val tvShowDetail = tvShowResource.data
-            val newState = !(tvShowDetail?.favorited ?: false)
-            if (tvShowDetail != null) {
-                tmdbRepository.setFavoriteTvShow(tvShowDetail, newState)
+            val tvShowWithSeason = tvShowResource.data
+            if (tvShowWithSeason != null) {
+                val tvShowEntity = tvShowWithSeason.mTvShow
+                val newState = !tvShowEntity.favorited
+                tmdbRepository.setFavoriteTvShow(tvShowEntity, newState)
                 return newState
             }
         }

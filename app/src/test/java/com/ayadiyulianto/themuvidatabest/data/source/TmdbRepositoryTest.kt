@@ -97,10 +97,12 @@ class TmdbRepositoryTest{
         dummyTvShowWithSeason.value = detailTvShowWithSeason
         `when`(local.getTvShowWithSeason(tvShowId.toString())).thenReturn(dummyTvShowWithSeason)
 
-        val showEntity = LiveDataTestUtil.getValue(tmdbRepository.getTvShowWithSeason(detailTvShow.tvShowId.toString()))
+        val showEntity = LiveDataTestUtil.getValue(tmdbRepository.getTvShowWithSeason(detailTvShowWithSeason.mTvShow.tvShowId.toString()))
         verify(local).getTvShowWithSeason(tvShowId.toString())
         assertNotNull(showEntity)
-        assertEquals(detailTvShow.tvShowId, showEntity.mTvShow.tvShowId)
+        assertNotNull(showEntity.data?.mTvShow)
+        assertNotNull(showEntity.data?.mSeason)
+        assertEquals(detailTvShow.tvShowId, showEntity.data?.mTvShow?.tvShowId)
     }
 
     @Test
@@ -144,22 +146,6 @@ class TmdbRepositoryTest{
     }
 
     @Test
-    fun addFavoriteTvShow(){
-        val dummyTvShow = MutableLiveData<TvShowEntity>()
-        dummyTvShow.value = detailTvShow
-        `when`(local.getTvShowById(tvShowId.toString())).thenReturn(dummyTvShow)
-
-        val statusFavorite = true
-        tmdbRepository.setFavoriteTvShow(detailTvShow, statusFavorite)
-
-        val expectedResult = detailTvShow
-        expectedResult.favorited = statusFavorite
-
-        val byId = LiveDataTestUtil.getValue(tmdbRepository.getTvShowDetail(detailTvShow.tvShowId.toString()))
-        assertThat(byId.data, equalTo(expectedResult))
-    }
-
-    @Test
     fun removeFavoriteMovie(){
         val dummyMovie = MutableLiveData<MovieEntity>()
         dummyMovie.value = detailMovie
@@ -172,6 +158,22 @@ class TmdbRepositoryTest{
         expectedResult.favorited = statusFavorite
 
         val byId = LiveDataTestUtil.getValue(tmdbRepository.getMovieDetail(detailMovie.movieId.toString()))
+        assertThat(byId.data, equalTo(expectedResult))
+    }
+
+    @Test
+    fun addFavoriteTvShow(){
+        val dummyTvShow = MutableLiveData<TvShowEntity>()
+        dummyTvShow.value = detailTvShow
+        `when`(local.getTvShowById(tvShowId.toString())).thenReturn(dummyTvShow)
+
+        val statusFavorite = true
+        tmdbRepository.setFavoriteTvShow(detailTvShow, statusFavorite)
+
+        val expectedResult = detailTvShow
+        expectedResult.favorited = statusFavorite
+
+        val byId = LiveDataTestUtil.getValue(tmdbRepository.getTvShowDetail(detailTvShow.tvShowId.toString()))
         assertThat(byId.data, equalTo(expectedResult))
     }
 
@@ -190,5 +192,4 @@ class TmdbRepositoryTest{
         val byId = LiveDataTestUtil.getValue(tmdbRepository.getTvShowDetail(detailTvShow.tvShowId.toString()))
         assertThat(byId.data, equalTo(expectedResult))
     }
-
 }

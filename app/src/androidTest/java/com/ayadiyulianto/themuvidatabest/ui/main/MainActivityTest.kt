@@ -63,6 +63,7 @@ class MainActivityTest {
         onView(withId(R.id.movieRating)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieReleaseDate)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieDuration)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.movieGenres)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.movieSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.ytPlayerView)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
     }
@@ -89,6 +90,7 @@ class MainActivityTest {
         onView(withId(R.id.tvShowRating)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowReleaseDate)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowDuration)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.tvShowGenres)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.tvShowSinopsis)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.fabFavorite)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withId(R.id.rv_seasons)).check(matches(isDisplayed()))

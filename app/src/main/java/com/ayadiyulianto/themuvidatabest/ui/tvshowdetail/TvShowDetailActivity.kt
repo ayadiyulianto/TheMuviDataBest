@@ -55,24 +55,18 @@ class TvShowDetailActivity : AppCompatActivity() {
         if (extras != null) {
             val showId = extras.getInt(EXTRA_TV_SHOW)
             if (showId != 0) {
-                val showDetails = tvShowDetailViewModel.getTvShowDetail(showId)
-                showDetails.observe(this, { res ->
+                tvShowDetailViewModel.setSelectedTvShow(showId)
+                tvShowDetailViewModel.tvShowWithSeason.observe(this, { res ->
                     when (res.status) {
                         Status.LOADING -> binding.contentTvShowDetail.progressCircular.visibility =
                             View.VISIBLE
                         Status.SUCCESS -> {
                             Log.i("result", res.data.toString())
                             binding.contentTvShowDetail.progressCircular.visibility = View.GONE
-                            res.data?.let { showDetailTvShow(it) }
-
-                            val showSeasons = tvShowDetailViewModel.getTvShowWithSeason(showId)
-                            showSeasons.observe(this, { tvShowSeason ->
-                                if (tvShowSeason != null) {
-                                    showDetailTvShow(tvShowSeason.mTvShow)
-                                    seasonAdapter.submitList(tvShowSeason.mSeason)
-                                    // binding.contentTvShowDetail.cvSeasons.requestLayout()
-                                }
-                            })
+                            res.data?.let {
+                                showDetailTvShow(it.mTvShow)
+                                seasonAdapter.submitList(it.mSeason)
+                            }
                         }
                         Status.ERROR -> {
                             binding.contentTvShowDetail.progressCircular.visibility = View.GONE

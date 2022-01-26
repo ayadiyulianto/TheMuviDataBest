@@ -13,7 +13,7 @@ interface TmdbDataSource {
     fun getDiscoverTvShow(): LiveData<Resource<PagedList<TvShowEntity>>>
     fun getMovieDetail(movieId: String): LiveData<Resource<MovieEntity>>
     fun getTvShowDetail(showId: String): LiveData<Resource<TvShowEntity>>
-    fun getTvShowWithSeason(showId: String): LiveData<TvShowWithSeason>
+    fun getTvShowWithSeason(showId: String): LiveData<Resource<TvShowWithSeason>>
     fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>>
     fun getFavoriteTvShow(): LiveData<PagedList<TvShowEntity>>
     fun setFavoriteMovie(movie: MovieEntity, newState: Boolean)

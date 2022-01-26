@@ -223,8 +223,65 @@ class TmdbRepository private constructor(
         }.asLiveData()
     }
 
-    override fun getTvShowWithSeason(showId: String): LiveData<TvShowWithSeason> =
-        localDataSource.getTvShowWithSeason(showId)
+    override fun getTvShowWithSeason(showId: String): LiveData<Resource<TvShowWithSeason>> {
+        return object : NetworkBoundResource<TvShowWithSeason, TvShowDetailResponse>(appExecutors) {
+            public override fun loadFromDB(): LiveData<TvShowWithSeason> =
+                localDataSource.getTvShowWithSeason(showId)
+
+            override fun shouldFetch(data: TvShowWithSeason?): Boolean =
+                data?.mSeason == null || data.mSeason.isEmpty()
+
+            public override fun createCall(): LiveData<ApiResponse<TvShowDetailResponse>> =
+                remoteDataSource.getTvShow(showId)
+
+            public override fun saveCallResult(data: TvShowDetailResponse) {
+                val listOfGenre = ArrayList<String>()
+                val listOfSeason = ArrayList<SeasonEntity>()
+
+                if (data.genres != null) {
+                    for (genre in (data.genres)) {
+                        if (genre != null) {
+                            genre.name?.let { listOfGenre.add(it) }
+                        }
+                    }
+                }
+
+                if (data.seasons != null) {
+                    for (season in (data.seasons)) {
+                        if (season != null) {
+                            val s = SeasonEntity(
+                                season.id,
+                                data.id,
+                                season.name,
+                                season.overview,
+                                season.airDate,
+                                season.seasonNumber,
+                                season.episodeCount,
+                                "$imageBaseUrl${season.posterPath}"
+                            )
+                            listOfSeason.add(s)
+                        }
+                    }
+                }
+
+                val show = TvShowEntity(
+                    data.id,
+                    data.name,
+                    data.overview,
+                    "$imageBaseUrl${data.posterPath}",
+                    "$imageBaseUrl${data.backdropPath}",
+                    data.voteAverage,
+                    data.firstAirDate,
+                    JSONArray(listOfGenre).toString(),
+                    data.episodeRunTime?.get(0),
+                    data.videos?.getYoutubeTrailerId()
+                )
+                //using insert for add search result into db, and use the data for show later
+                localDataSource.insertTvShow(arrayListOf(show))
+                localDataSource.insertSeason(listOfSeason)
+            }
+        }.asLiveData()
+    }
 
     override fun getFavoriteMovie(): LiveData<PagedList<MovieEntity>> {
         val config = PagedList.Config.Builder()

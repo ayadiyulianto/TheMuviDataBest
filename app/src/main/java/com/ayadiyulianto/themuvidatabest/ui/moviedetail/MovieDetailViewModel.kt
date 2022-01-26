@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
     ViewModel() {
 
-    private var movieData: LiveData<Resource<MovieEntity>> = MutableLiveData()
+    var movieData: LiveData<Resource<MovieEntity>> = MutableLiveData()
 
     fun getMovieDetail(movieId: Int): LiveData<Resource<MovieEntity>> {
         movieData = tmdbRepository.getMovieDetail(movieId.toString())

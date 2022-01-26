@@ -154,15 +154,65 @@ class FakeTmdbRepository constructor(
         }.asLiveData()
     }
 
-    override fun getTvShowWithSeason(showId: String): LiveData<TvShowWithSeason> =
-        localDataSource.getTvShowWithSeason(showId)
-
     override fun getTvShowDetail(showId: String): LiveData<Resource<TvShowEntity>> {
-        return object: NetworkBoundResource<TvShowEntity,TvShowDetailResponse>(appExecutors) {
-            public override fun loadFromDB(): LiveData<TvShowEntity> = localDataSource.getTvShowById(showId)
+        return object : NetworkBoundResource<TvShowEntity, TvShowDetailResponse>(appExecutors) {
+            public override fun loadFromDB(): LiveData<TvShowEntity> =
+                localDataSource.getTvShowById(showId)
 
             override fun shouldFetch(data: TvShowEntity?): Boolean =
                 data?.runtime == null
+
+            public override fun createCall(): LiveData<ApiResponse<TvShowDetailResponse>> =
+                remoteDataSource.getTvShow(showId)
+
+            public override fun saveCallResult(data:TvShowDetailResponse) {
+                val listOfGenre = ArrayList<String>()
+                val listOfSeason = ArrayList<SeasonEntity>()
+
+                for (genre in (data.genres)!!){
+                    listOfGenre.add(genre!!.name!!)
+                }
+
+                for(season in(data.seasons)!!){
+                    if (season != null) {
+                        val s = SeasonEntity(
+                            season.id,
+                            data.id,
+                            season.name,
+                            season.overview,
+                            season.airDate,
+                            season.seasonNumber,
+                            season.episodeCount,
+                            season.posterPath.toString()
+                        )
+                        listOfSeason.add(s)
+                    }
+                }
+
+                val show = TvShowEntity(
+                    data.id,
+                    data.name,
+                    data.overview,
+                    data.posterPath,
+                    data.backdropPath,
+                    data.voteAverage,
+                    data.firstAirDate,
+                    JSONArray(listOfGenre).toString(),
+                    data.episodeRunTime!![0]
+                )
+                localDataSource.updateTvShow(show)
+                localDataSource.insertSeason(listOfSeason)
+            }
+        }.asLiveData()
+    }
+
+    override fun getTvShowWithSeason(showId: String): LiveData<Resource<TvShowWithSeason>> {
+        return object : NetworkBoundResource<TvShowWithSeason, TvShowDetailResponse>(appExecutors) {
+            public override fun loadFromDB(): LiveData<TvShowWithSeason> =
+                localDataSource.getTvShowWithSeason(showId)
+
+            override fun shouldFetch(data: TvShowWithSeason?): Boolean =
+                data?.mSeason == null || data.mSeason.isEmpty()
 
             public override fun createCall(): LiveData<ApiResponse<TvShowDetailResponse>> =
                 remoteDataSource.getTvShow(showId)

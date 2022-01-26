@@ -80,10 +80,6 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Mengubah status favorit dalam movie ke dalam menjadi true (difavoritkan)
     - Memastikan data dalam database sesuai dengan yang diharapkan
 
-- Menghapus movie dari daftar favorit
-    - Mengubah status favorit dalam movie ke dalam menjadi false (tidak difavoritkan)
-    - Memastikan data dalam database sesuai dengan yang diharapkan
-
 #### MoviesViewModelTest
 
 - Memuat list movie
@@ -91,12 +87,6 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Memastikan jumlah data List movie sesuai dengan yang diharapkan
 
 #### TvShowDetailViewModelTest
-
-- Memuat Tv Show
-    - Memanipulasi data ketika pemanggilan data tv show di kelas repository.
-    - Memastikan metode di kelas repository terpanggil.
-    - Memastikan data Tv Show tidak null
-    - Memastikan data Tv Show sesuai dengan yang diharapkan
 
 - Memuat Tv Show with Season Detail
     - Memanipulasi data ketika pemanggilan data tv show with season detail di kelas repository.
@@ -108,10 +98,6 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Mengubah status favorit dalam tv show ke dalam menjadi true (difavoritkan)
     - Memastikan data dalam database sesuai dengan yang diharapkan
   
-- Menghapus tv show dari daftar favorit
-    - Mengubah status favorit dalam tv show ke dalam menjadi false (tidak difavoritkan)
-    - Memastikan data dalam database sesuai dengan yang diharapkan
-
 #### TvShowsViewModelTest
 
 - Memuat list tv show
@@ -139,6 +125,7 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Memastikan FAB untuk Movie Favorit dapat ditampilkan
     - Memastikan TextView untuk judul movie dapat ditampilkan
     - Memastikan RatingBar untuk movie dapat ditampilkan
+    - Memastikan TextView genre movie dapat ditampilkan
     - Memastikan TextView tanggal perilisan movie dapat ditampilkan
     - Memastikan TextView synopsis movie dapat ditampilkan
     - Memastikan YT Player untuk menampilkan Trailer Movie dapat dilihat dan ditampilkan
@@ -158,6 +145,7 @@ Adapun detail skenario testing aplikasi ini adalah sebagai berikut:
     - Memastikan FAB untuk tv show Favorit dapat ditampilkan
     - Memastikan TextView untuk judul tv show dapat ditampilkan
     - Memastikan RatingBar untuk tv show rating dapat ditampilkan
+    - Memastikan TextView genre tv show dapat ditampilkan
     - Memastikan TextView tanggal perilisan tv show dapat ditampilkan
     - Memastikan TextView synopsis tv show dapat ditampilkan
     - Memastikan rv_seasons dapat ditampilkan dengan baik

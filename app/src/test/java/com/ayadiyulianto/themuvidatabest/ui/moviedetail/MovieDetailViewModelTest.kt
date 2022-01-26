@@ -6,10 +6,8 @@ import androidx.lifecycle.Observer
 import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
 import com.ayadiyulianto.themuvidatabest.util.DataDummy
-import com.ayadiyulianto.themuvidatabest.util.LiveDataTestUtil
 import com.ayadiyulianto.themuvidatabest.vo.Resource
-import org.hamcrest.MatcherAssert
-import org.hamcrest.core.IsEqual
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +29,9 @@ class MovieDetailViewModelTest {
     @Mock
     private lateinit var tmdbRepository: TmdbRepository
 
+    @Mock
+    private lateinit var observer: Observer<Resource<MovieEntity>>
+
     @Before
     fun setUp() {
         viewModel = MovieDetailViewModel(tmdbRepository)
@@ -38,49 +39,32 @@ class MovieDetailViewModelTest {
 
     @Test
     fun getMovieDetail() {
-        val movieDummy = MutableLiveData<Resource<MovieEntity>>()
-        val resource = Resource.success(dummyMovieDetail)
-        movieDummy.value = resource
-        `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(movieDummy)
+        val expected = MutableLiveData<Resource<MovieEntity>>()
+        expected.value = Resource.success(dummyMovieDetail)
+        `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(expected)
 
-        val observer = mock(Observer::class.java) as Observer<Resource<MovieEntity>>
         viewModel.getMovieDetail(movieId).observeForever(observer)
-        verify(observer).onChanged(resource)
+        verify(observer).onChanged(expected.value)
+
+        val expectedValue = expected.value
+        val actualValue = viewModel.movieData.value
+
+        assertEquals(expectedValue, actualValue)
     }
 
     @Test
     fun addFavoriteMovie(){
-        val movieDummy = MutableLiveData<Resource<MovieEntity>>()
-        val resource = Resource.success(dummyMovieDetail)
-        movieDummy.value = resource
-        `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(movieDummy)
+        val expected = MutableLiveData<Resource<MovieEntity>>()
+        expected.value = Resource.success(dummyMovieDetail)
+        `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(expected)
 
-        val statusFavorite = true
-        tmdbRepository.setFavoriteMovie(dummyMovieDetail, statusFavorite)
-
-        val expectedResult = dummyMovieDetail
-        expectedResult.favorited = statusFavorite
         viewModel.setFavorite()
+        viewModel.getMovieDetail(movieId).observeForever(observer)
+        verify(observer).onChanged(expected.value)
 
-        val byId = LiveDataTestUtil.getValue(tmdbRepository.getMovieDetail(dummyMovieDetail.movieId.toString()))
-        MatcherAssert.assertThat(byId.data, IsEqual.equalTo(expectedResult))
-    }
+        val expectedValue = expected.value
+        val actualValue = viewModel.movieData.value
 
-    @Test
-    fun removeFavoriteMovie(){
-        val movieDummy = MutableLiveData<Resource<MovieEntity>>()
-        val resource = Resource.success(dummyMovieDetail)
-        movieDummy.value = resource
-        `when`(tmdbRepository.getMovieDetail(movieId.toString())).thenReturn(movieDummy)
-
-        val statusFavorite = false
-        tmdbRepository.setFavoriteMovie(dummyMovieDetail, statusFavorite)
-
-        val expectedResult = dummyMovieDetail
-        expectedResult.favorited = statusFavorite
-        viewModel.setFavorite()
-
-        val byId = LiveDataTestUtil.getValue(tmdbRepository.getMovieDetail(dummyMovieDetail.movieId.toString()))
-        MatcherAssert.assertThat(byId.data, IsEqual.equalTo(expectedResult))
+        assertEquals(expectedValue, actualValue)
     }
 }
