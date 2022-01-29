@@ -1,6 +1,7 @@
 package com.ayadiyulianto.themuvidatabest.util
 
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.*
+import com.ayadiyulianto.themuvidatabest.data.source.remote.entity.SearchEntity
 
 object DataDummy {
 
@@ -187,5 +188,40 @@ object DataDummy {
             )
         )
         return detailTvShowWithSeason
+    }
+
+    fun generateDummySearch(): List<SearchEntity> {
+        val movies = ArrayList<SearchEntity>()
+
+        movies.add(
+            SearchEntity(
+                460465,
+                "Mortal Kombat",
+                "/6Wdl9N6dL0Hi0T1qJLWSz6gMLbd.jpg",
+                "/9yBVqNruk6Ykrwc32qrK2TIE5xw.jpg",
+                "movie",
+                "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
+                        "Sub-Zero, seeks out and trains with Earth's greatest champions as he prepares to stand against the enemies of " +
+                        "Outworld in a high stakes battle for the universe.",
+                7.9,
+                "2021-04-07"
+            )
+        )
+
+        movies.add(
+            SearchEntity(
+                399566,
+                "Godzilla vs. Kong",
+                "/pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg",
+                "/inJjDhCjfhh3RtrJWBmmDqeuSYC.jpg",
+                "movie",
+                "In a time when monsters walk the Earth, humanity’s fight for its future sets Godzilla and Kong on a " +
+                        "collision course that will see the two most powerful forces of nature on the planet collide in a spectacular battle for the ages.",
+                8.2,
+                "2021-03-24"
+            )
+        )
+
+        return movies
     }
 }

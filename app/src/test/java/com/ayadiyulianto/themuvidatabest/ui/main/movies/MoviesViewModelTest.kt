@@ -46,8 +46,8 @@ class MoviesViewModelTest {
         `when`(dummyMovie.data?.size).thenReturn(1)
         val movie = MutableLiveData<Resource<PagedList<MovieEntity>>>()
         movie.value = dummyMovie
-
         `when`(tmdbRepository.getDiscoverMovies()).thenReturn(movie)
+
         val movieEntities = viewModel.getDiscoverMovies().value?.data
         verify(tmdbRepository).getDiscoverMovies()
         assertNotNull(movieEntities)

@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.ui.main.tvshows
+package com.ayadiyulianto.themuvidatabest.ui.main.favorites.tvshows
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowEntity
 import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -18,15 +17,15 @@ import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
-class TvShowsViewModelTest {
+class FavoriteTvShowsViewModelTest {
 
-    private lateinit var viewModel: TvShowsViewModel
+    private lateinit var viewModel: FavoriteTvShowsViewModel
 
     @Mock
     private lateinit var tmdbRepository: TmdbRepository
 
     @Mock
-    private lateinit var observer: Observer<Resource<PagedList<TvShowEntity>>>
+    private lateinit var observer: Observer<PagedList<TvShowEntity>>
 
     @Mock
     private lateinit var pagedList: PagedList<TvShowEntity>
@@ -36,23 +35,22 @@ class TvShowsViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = TvShowsViewModel(tmdbRepository)
+        viewModel = FavoriteTvShowsViewModel(tmdbRepository)
     }
 
     @Test
-    fun getTvShows() {
-        val dummyTvShow= Resource.success(pagedList)
-        Mockito.`when`(dummyTvShow.data?.size).thenReturn(1)
-        val show = MutableLiveData<Resource<PagedList<TvShowEntity>>>()
-        show.value = dummyTvShow
-        Mockito.`when`(tmdbRepository.getDiscoverTvShow()).thenReturn(show)
+    fun getTvShowFav() {
+        Mockito.`when`(pagedList.size).thenReturn(1)
+        val shows = MutableLiveData<PagedList<TvShowEntity>>()
+        shows.value = pagedList
+        Mockito.`when`(tmdbRepository.getFavoriteTvShow()).thenReturn(shows)
 
-        val showEntities = viewModel.getDiscoverTvShow().value?.data
-        Mockito.verify(tmdbRepository).getDiscoverTvShow()
+        val showEntities = viewModel.getTvShowFav().value
+        Mockito.verify(tmdbRepository).getFavoriteTvShow()
         assertNotNull(showEntities)
         assertEquals(1, showEntities?.size)
 
-        viewModel.getDiscoverTvShow().observeForever(observer)
-        Mockito.verify(observer).onChanged(dummyTvShow)
+        viewModel.getTvShowFav().observeForever(observer)
+        Mockito.verify(observer).onChanged(pagedList)
     }
 }
