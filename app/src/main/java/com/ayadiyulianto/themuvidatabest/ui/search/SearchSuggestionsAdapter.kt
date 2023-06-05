@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.source.remote.entity.SearchEntity
-import com.ayadiyulianto.themuvidatabest.databinding.ItemSuggestionsBinding
+import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
 import com.ayadiyulianto.themuvidatabest.ui.moviedetail.MovieDetailActivity
 import com.ayadiyulianto.themuvidatabest.ui.tvshowdetail.TvShowDetailActivity
-import com.ayadiyulianto.themuvidatabest.util.Utils
+import com.ayadiyulianto.themuvidatabest.core.util.Utils
+import com.ayadiyulianto.themuvidatabest.databinding.ItemSuggestionsBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter
 
 class SearchSuggestionsAdapter(inflater: LayoutInflater?) :
-    SuggestionsAdapter<SearchEntity, SearchSuggestionsAdapter.SuggestionHolder>(inflater) {
+    SuggestionsAdapter<SearchItem, SearchSuggestionsAdapter.SuggestionHolder>(inflater) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionHolder {
         val itemSearchBinding =
@@ -24,7 +24,7 @@ class SearchSuggestionsAdapter(inflater: LayoutInflater?) :
     }
 
     override fun onBindSuggestionHolder(
-        suggestion: SearchEntity,
+        suggestion: SearchItem,
         holder: SuggestionHolder,
         position: Int
     ) {
@@ -37,7 +37,7 @@ class SearchSuggestionsAdapter(inflater: LayoutInflater?) :
 
     class SuggestionHolder(private val binding: ItemSuggestionsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(suggestion: SearchEntity) {
+        fun bind(suggestion: SearchItem) {
             with(binding) {
                 tvItemTitle.text = suggestion.name
                 tvItemDate.text = Utils.changeStringToDateFormat(suggestion.releaseOrAirDate)

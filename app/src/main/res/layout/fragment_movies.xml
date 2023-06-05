@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ayadiyulianto.themuvidatabest.ui.main.movies.MoviesFragment">
+    tools:context="com.ayadiyulianto.themuvidatabest.ui.movies.MoviesFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movies"

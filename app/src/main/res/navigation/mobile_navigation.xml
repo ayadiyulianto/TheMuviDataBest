@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_movies"
-        android:name="com.ayadiyulianto.themuvidatabest.ui.main.movies.MoviesFragment"
+        android:name="com.ayadiyulianto.themuvidatabest.ui.movies.MoviesFragment"
         android:label="@string/title_movie"
         tools:layout="@layout/fragment_movies" />
 
     <fragment
         android:id="@+id/navigation_tvshows"
-        android:name="com.ayadiyulianto.themuvidatabest.ui.main.tvshows.TvShowsFragment"
+        android:name="com.ayadiyulianto.themuvidatabest.ui.tvshows.TvShowsFragment"
         android:label="@string/title_tvshow"
         tools:layout="@layout/fragment_tv_shows" />
     <fragment

@@ -2,19 +2,20 @@ package com.ayadiyulianto.themuvidatabest.ui.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.data.source.remote.entity.SearchEntity
+import androidx.lifecycle.asLiveData
+import com.ayadiyulianto.themuvidatabest.core.data.Resource
+import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
+import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(private val tmdbRepository: TmdbRepository) :
+//@HiltViewModel
+class SearchViewModel //@Inject constructor
+    (private val tmdbUseCase: TmdbUseCase) :
     ViewModel() {
 
-    fun getTrendings(): LiveData<List<SearchEntity>> = tmdbRepository.getTrendings()
+    fun getTrendings(): LiveData<Resource<List<SearchItem>>> = tmdbUseCase.getTrendings().asLiveData()
 
-    fun getSearchResult(title: String): LiveData<List<SearchEntity>> =
-        tmdbRepository.getSearchResult(title)
-
-    fun getLoading(): LiveData<Boolean> = tmdbRepository.isLoading
+    fun getSearchResult(title: String): LiveData<Resource<List<SearchItem>>> =
+        tmdbUseCase.getSearchResult(title).asLiveData()
 }

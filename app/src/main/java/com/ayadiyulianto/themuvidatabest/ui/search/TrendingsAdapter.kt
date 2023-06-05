@@ -7,16 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.source.remote.entity.SearchEntity
+import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
 import com.ayadiyulianto.themuvidatabest.databinding.ItemMoviesTvshowsBinding
 import com.ayadiyulianto.themuvidatabest.ui.moviedetail.MovieDetailActivity
 import com.ayadiyulianto.themuvidatabest.ui.tvshowdetail.TvShowDetailActivity
-import com.ayadiyulianto.themuvidatabest.util.Utils
+import com.ayadiyulianto.themuvidatabest.core.util.Utils
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
 class TrendingsAdapter :
-    ListAdapter<SearchEntity, TrendingsAdapter.TrendingViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<SearchItem, TrendingsAdapter.TrendingViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingViewHolder {
         val itemsTrendingDetailBinding =
@@ -31,11 +31,11 @@ class TrendingsAdapter :
 
     class TrendingViewHolder(private val binding: ItemMoviesTvshowsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(trending: SearchEntity) {
+        fun bind(trending: SearchItem) {
             with(binding) {
                 tvItemTitle.text = trending.name
                 tvItemDate.text = Utils.changeStringToDateFormat(trending.releaseOrAirDate)
-                tvItemRating.rating = (trending.voteAverage?.toFloat() ?: 0F) / 2
+                tvItemRating.rating = trending.voteAverage.toFloat() / 2
                 tvItemSynopsis.text = trending.overview
                 itemView.setOnClickListener {
                     //show detail page
@@ -60,12 +60,12 @@ class TrendingsAdapter :
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SearchEntity>() {
-            override fun areItemsTheSame(oldItem: SearchEntity, newItem: SearchEntity): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SearchItem>() {
+            override fun areItemsTheSame(oldItem: SearchItem, newItem: SearchItem): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun areContentsTheSame(oldItem: SearchEntity, newItem: SearchEntity): Boolean {
+            override fun areContentsTheSame(oldItem: SearchItem, newItem: SearchItem): Boolean {
                 return oldItem == newItem
             }
         }
