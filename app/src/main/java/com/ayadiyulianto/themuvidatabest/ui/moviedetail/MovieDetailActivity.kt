@@ -4,26 +4,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
+import com.ayadiyulianto.themuvidatabest.core.data.Resource
+import com.ayadiyulianto.themuvidatabest.core.domain.model.Movie
+import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeMinuteToDurationFormat
+import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeStringToDateFormat
 import com.ayadiyulianto.themuvidatabest.databinding.ActivityMovieDetailBinding
-import com.ayadiyulianto.themuvidatabest.util.Utils.changeMinuteToDurationFormat
-import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
-import com.ayadiyulianto.themuvidatabest.vo.Status
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailBinding
-    private val movieDetailViewModel: MovieDetailViewModel by viewModels()
+    private val movieDetailViewModel: MovieDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +39,21 @@ class MovieDetailActivity : AppCompatActivity() {
             val movieId = extras.getInt(EXTRA_MOVIE)
             if (movieId != 0) {
                 val movieDetails = movieDetailViewModel.getMovieDetail(movieId)
-                movieDetails.observe(this, { res ->
-                    when (res.status) {
-                        Status.LOADING -> binding.contentMovieDetail.progressCircular.visibility =
+                movieDetails.observe(this) { movie ->
+                    when (movie) {
+                        is Resource.Loading -> binding.contentMovieDetail.progressCircular.visibility =
                             View.VISIBLE
-                        Status.SUCCESS -> {
-                            Log.i("result", res.data.toString())
+
+                        is Resource.Success -> {
+                            Log.i("result", movie.data.toString())
                             binding.contentMovieDetail.progressCircular.visibility = View.GONE
-                            res.data?.let { showDetailMovie(it) }
+                            movie.data?.let {
+                                movieDetailViewModel.setMovie(it)
+                                showDetailMovie(it)
+                            }
                         }
-                        Status.ERROR -> {
+
+                        is Resource.Error -> {
                             binding.contentMovieDetail.progressCircular.visibility = View.GONE
                             Toast.makeText(
                                 this,
@@ -57,7 +62,7 @@ class MovieDetailActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
-                })
+                }
             }
         }
 
@@ -71,7 +76,7 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun showDetailMovie(movieDetails: MovieEntity) {
+    private fun showDetailMovie(movieDetails: Movie) {
         with(binding) {
             setFabIcon(movieDetails.favorited)
             toolbarLayout.title = movieDetails.title
@@ -81,12 +86,10 @@ class MovieDetailActivity : AppCompatActivity() {
             contentMovieDetail.movieReleaseDate.text =
                 changeStringToDateFormat(movieDetails.releaseDate)
             contentMovieDetail.movieRating.rating =
-                (movieDetails.voteAverage?.toFloat() ?: 0F) / 2
-            contentMovieDetail.movieDuration.text = movieDetails.runtime?.let {
-                changeMinuteToDurationFormat(
-                    it
-                )
-            }
+                movieDetails.voteAverage.toFloat() / 2
+            contentMovieDetail.movieDuration.text = changeMinuteToDurationFormat(
+                movieDetails.runtime
+            )
             contentMovieDetail.movieGenres.text = movieDetails.genres
         }
 
@@ -107,7 +110,7 @@ class MovieDetailActivity : AppCompatActivity() {
             )
             .into(binding.movieBackdrop)
 
-        movieDetails.youtubeTrailerId?.let { setYTPlayer(it) }
+        setYTPlayer(movieDetails.youtubeTrailerId)
     }
 
     private fun setFabIcon(isFavorited: Boolean) {

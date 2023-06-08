@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.SeasonEntity
+import com.ayadiyulianto.themuvidatabest.core.domain.model.Season
 import com.ayadiyulianto.themuvidatabest.databinding.ItemSeasonsBinding
-import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringDateToYear
-import com.ayadiyulianto.themuvidatabest.util.Utils.changeStringToDateFormat
+import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeStringDateToYear
+import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeStringToDateFormat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 
-class SeasonsAdapter : ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder>(DIFF_CALLBACK) {
+class SeasonsAdapter : ListAdapter<Season, SeasonsAdapter.SeasonViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonViewHolder {
         val itemsSeasonDetailBinding =
@@ -29,18 +29,16 @@ class SeasonsAdapter : ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder
 
     class SeasonViewHolder(private val binding: ItemSeasonsBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(season: SeasonEntity) {
+        fun bind(season: Season) {
             with(binding) {
                 "Season ${season.seasonNumber}".also { tvItemTitle.text = it }
-                "${season.airDate?.let { changeStringDateToYear(it) }} | ${season.episodeCount} Eps.".also {
+                "${changeStringDateToYear(season.airDate)} | ${season.episodeCount} Eps.".also {
                     tvItemYear.text = it
                 }
                 "Season ${season.seasonNumber} premiered on ${
-                    season.airDate?.let {
-                        changeStringToDateFormat(
-                            it
-                        )
-                    }
+                    changeStringToDateFormat(
+                        season.airDate
+                    )
                 }.".also { tvItemPremiere.text = it }
                 season.overview.also { tvItemDescription.text = it }
 
@@ -57,12 +55,12 @@ class SeasonsAdapter : ListAdapter<SeasonEntity, SeasonsAdapter.SeasonViewHolder
     }
 
     companion object {
-        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<SeasonEntity>() {
-            override fun areItemsTheSame(oldItem: SeasonEntity, newItem: SeasonEntity): Boolean {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Season>() {
+            override fun areItemsTheSame(oldItem: Season, newItem: Season): Boolean {
                 return oldItem.seasonId == newItem.seasonId
             }
 
-            override fun areContentsTheSame(oldItem: SeasonEntity, newItem: SeasonEntity): Boolean {
+            override fun areContentsTheSame(oldItem: Season, newItem: Season): Boolean {
                 return oldItem == newItem
             }
         }

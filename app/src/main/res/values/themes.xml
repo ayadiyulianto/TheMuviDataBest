@@ -26,4 +26,9 @@
     <style name="Theme.TheMuviDataBest.NoTranslucentStatus">
         <item name="android:windowTranslucentStatus">false</item>
     </style>
+
+    <style name="Theme.TheMuviDataBest.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.MovieEntity
 import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.ui.movies.MoviesViewModel
 import com.ayadiyulianto.themuvidatabest.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_movies"
+            android:icon="@drawable/ic_baseline_movie_filter_24"
+            android:title="@string/title_movie" />
+        <item
+            android:id="@+id/navigation_tvshows"
+            android:icon="@drawable/ic_baseline_live_tv_24"
+            android:title="@string/title_tvshow" />
+        <item
+            android:id="@+id/menu_search"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="@string/search_title"/>
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_favorites"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="@string/title_favorite" />
+    </group>
+</menu>

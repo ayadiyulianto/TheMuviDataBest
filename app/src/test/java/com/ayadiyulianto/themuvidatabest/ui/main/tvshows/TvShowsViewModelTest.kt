@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.paging.PagedList
 import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowEntity
 import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
+import com.ayadiyulianto.themuvidatabest.ui.tvshows.TvShowsViewModel
 import com.ayadiyulianto.themuvidatabest.vo.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

@@ -8,3 +8,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TheMuviDataBest"
 include ':app'
+include ':core'
+include ':favorite'

@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
+//    id 'dagger.hilt.android.plugin'
 }
 
 def apikeyPropertiesFile = file("local.properties")
@@ -13,18 +13,16 @@ if (apikeyPropertiesFile.canRead()) {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.ayadiyulianto.themuvidatabest"
         minSdk 23
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "TMDB_API_KEY", apikeyProperties['TMDB_API_KEY'])
     }
 
     buildTypes {
@@ -34,55 +32,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.ayadiyulianto.themuvidatabest'
+    dynamicFeatures = [':favorite']
 }
 
+apply from: '../shared_dependencies.gradle'
+
 dependencies {
-
-    implementation "androidx.core:core-ktx:$coreVersion"
-    implementation "androidx.appcompat:appcompat:$appCompatVersion"
-    implementation "com.google.android.material:material:$materialVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
-    implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    implementation "androidx.navigation:navigation-fragment-ktx:$fragmentVersion"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
-    implementation "androidx.activity:activity-ktx:$activityXVersion"
-    implementation "com.github.bumptech.glide:glide:$glideVersion"
-    implementation "com.pierfrancescosoffritti.androidyoutubeplayer:core:$androidYTPlayerVersion"
-    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
-    implementation "androidx.room:room-runtime:$roomVersion"
-    implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
-    implementation "com.google.dagger:hilt-android:$hiltVersion"
-    implementation "androidx.legacy:legacy-support-v4:$legacySupportVersion"
-    implementation "com.github.mancj:MaterialSearchBar:$searchBarVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-
-    // testing
-    implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
-    testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation "org.mockito:mockito-inline:$mockitoVersion"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
-    testImplementation "androidx.arch.core:core-testing:$archCoreTestingVersion"
-    androidTestImplementation "androidx.test.ext:junit:$junitExtversion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-    androidTestImplementation "androidx.test:runner:$androidTestVersion"
-    androidTestImplementation "androidx.test:rules:$androidTestVersion"
-    androidTestImplementation "androidx.test.ext:junit:$junitExtversion"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
+    implementation project(":core")
 }
 
 // Allow references to generated code

@@ -45,11 +45,11 @@ class TvShowDetailViewModelTest {
         expected.value = Resource.success(dummyTvShowWithSeason)
         Mockito.`when`(tmdbRepository.getTvShowWithSeason(showId.toString())).thenReturn(expected)
 
-        viewModel.tvShowWithSeason.observeForever(observer)
+        viewModel.tvShowWithSeasonEntity.observeForever(observer)
         Mockito.verify(observer).onChanged(expected.value)
 
         val expectedValue = expected.value
-        val actualValue = viewModel.tvShowWithSeason.value
+        val actualValue = viewModel.tvShowWithSeasonEntity.value
 
         Assert.assertEquals(expectedValue, actualValue)
     }
@@ -62,11 +62,11 @@ class TvShowDetailViewModelTest {
 
         viewModel.setFavorite()
 
-        viewModel.tvShowWithSeason.observeForever(observer)
+        viewModel.tvShowWithSeasonEntity.observeForever(observer)
         Mockito.verify(observer).onChanged(expected.value)
 
         val expectedValue = expected.value
-        val actualValue = viewModel.tvShowWithSeason.value
+        val actualValue = viewModel.tvShowWithSeasonEntity.value
 
         Assert.assertEquals(expectedValue, actualValue)
     }

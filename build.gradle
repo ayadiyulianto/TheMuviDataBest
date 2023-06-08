@@ -1,45 +1,48 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.hiltVersion = '2.38.1'
+    ext.hiltVersion = '2.44'
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
-        classpath("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
+        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21'
+//        classpath("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
     ext {
         //dependencies version
-        coreVersion = '1.7.0'
-        appCompatVersion = '1.4.1'
-        constraintLayoutVersion = '2.1.3'
-        materialVersion = '1.5.0'
-        recyclerViewVersion = '1.2.1'
-        lifecycleVersion = '2.4.0'
-        fragmentVersion = '2.3.5'
-        navigationVersion = '2.3.5'
-        activityXVersion = '1.4.0'
-        glideVersion = '4.12.0'
+        coreVersion = '1.10.1'
+        appCompatVersion = '1.6.1'
+        constraintLayoutVersion = '2.1.4'
+        materialVersion = '1.9.0'
+        recyclerViewVersion = '1.3.0'
+        lifecycleVersion = '2.6.1'
+        fragmentVersion = '2.5.3'
+        navigationVersion = '2.5.3'
+        activityXVersion = '1.7.2'
+        glideVersion = '4.15.1'
         androidYTPlayerVersion = '11.0.1'
         retrofitVersion = '2.9.0'
-        okhttpVersion = '4.9.0'
-        roomVersion = '2.4.1'
-        pagingVersion = '2.1.2'
+        okhttpVersion = '5.0.0-alpha.11'
+        roomVersion = '2.5.1'
+        pagingVersion = '3.1.1'
         searchBarVersion = '0.8.5'
         legacySupportVersion = '1.0.0'
+        multidex_version = "2.0.1"
+        kotlinCoroutinesVersion = "1.7.1"
+        koin_version = "3.4.1"
 
         junitVersion = '4.13.2'
-        junitExtversion = '1.1.3'
-        espressoVersion = '3.4.0'
-        mockitoVersion = '4.0.0'
+        junitExtversion = '1.1.5'
+        espressoVersion = '3.5.1'
+        mockitoVersion = '5.3.1'
         mockitoKotlinVersion = '4.0.0'
-        archCoreTestingVersion = '2.1.0'
-        androidTestVersion = '1.4.0'
+        archCoreTestingVersion = '2.2.0'
+        androidTestVersion = '1.5.2'
     }
 }
 
