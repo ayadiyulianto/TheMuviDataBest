@@ -35,7 +35,7 @@ class FavoriteTvShowsAdapter: ListAdapter<TvShow, FavoriteTvShowsAdapter.TvShowV
             with(binding) {
                 tvItemTitle.text = show.name
                 tvItemDate.text = Utils.changeStringToDateFormat(show.firstAirDate)
-                tvItemRating.rating = (show.voteAverage?.toFloat() ?: 0F) / 2
+                tvItemRating.rating = show.voteAverage.toFloat() / 2
                 tvItemSynopsis.text = show.overview
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, TvShowDetailActivity::class.java)

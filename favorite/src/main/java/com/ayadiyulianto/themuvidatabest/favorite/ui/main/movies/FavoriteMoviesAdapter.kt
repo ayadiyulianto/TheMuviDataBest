@@ -31,7 +31,7 @@ class FavoriteMoviesAdapter: ListAdapter<Movie, FavoriteMoviesAdapter.MoviesView
             with(binding) {
                 tvItemTitle.text = movie.title
                 tvItemDate.text = Utils.changeStringToDateFormat(movie.releaseDate)
-                tvItemRating.rating = (movie.voteAverage?.toFloat() ?: 0F) / 2
+                tvItemRating.rating = movie.voteAverage.toFloat() / 2
                 tvItemSynopsis.text = movie.overview
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, MovieDetailActivity::class.java)
