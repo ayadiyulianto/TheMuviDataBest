@@ -1,14 +1,11 @@
 version: 2.1
  
 orbs:
-  android: circleci/android@2.3.0
+  android: circleci/android@0.2.1
  
 jobs:
   build:
-    executor:
-      name: android/android-machine
-      resource-class: large
-      tag: 2021.10.1
+    executor: android/android
     steps:
       - checkout
       - restore_cache:
