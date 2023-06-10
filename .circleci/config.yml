@@ -11,8 +11,10 @@ jobs:
       tag: 2021.10.1
     steps:
       - checkout
-      - restore_cache:
-          key: android-orb-v1-
+      - android/restore-gradle-cache:
+          cache-prefix: gradle-v1-
+      - android/restore-build-cache:
+          cache-prefix: build-v1-
       - android/change-java-version:
           java-version: 17
       - run:
@@ -26,15 +28,14 @@ jobs:
           name: Check java version
           command:
             java -version
-      - save_cache:
-          key: 'android-orb-v1-{{ epoch }}'
-          paths:
-            - ~/.android/build-cache
-            - ~/.android/cache
       - run:
           name: Run Build
           command:
             ./gradlew build
+      - android/save-gradle-cache:
+          cache-prefix: gradle-v1-
+      - android/save-build-cache:
+          cache-prefix: build-v1-
       - store_artifacts: 
           path: app/build/reports
           destination: reports
