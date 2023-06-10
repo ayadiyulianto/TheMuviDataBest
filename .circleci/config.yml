@@ -11,6 +11,7 @@ jobs:
       tag: 2021.10.1
     steps:
       - checkout
+      - java-version: 17
       - restore_cache:
           key: android-orb-v1-
       - run:
@@ -29,10 +30,6 @@ jobs:
           paths:
             - ~/.android/build-cache
             - ~/.android/cache
-      - run:
-          name: Check java version
-          command:
-            java -version
       - run:
           name: Run Build
           command:
