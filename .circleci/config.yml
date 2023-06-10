@@ -25,6 +25,10 @@ jobs:
           name: Download Dependencies
           command: 
             ./gradlew androidDependencies
+      - run:
+          name: Check java version
+          command:
+            java -version
       - save_cache:
           key: 'android-orb-v1-{{ epoch }}'
           paths:
