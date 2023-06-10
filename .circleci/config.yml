@@ -31,17 +31,13 @@ jobs:
             - ~/.android/build-cache
             - ~/.android/cache
       - run:
-          name: Install jdk 17
+          name: Check java version
           command:
             java -version
       - run:
           name: Run Build
           command:
             ./gradlew build
-      - run:
-          name: Check java version
-          command:
-            java -version
       - store_artifacts: 
           path: app/build/reports
           destination: reports
