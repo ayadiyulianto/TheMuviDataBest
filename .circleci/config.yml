@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  android: circleci/android@2.3.0
+  android: circleci/android@2.0
 
 jobs:
   build:
@@ -16,12 +16,6 @@ jobs:
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
-      - run:
-          name: Install jdk 17
-          command:
-            sudo apt-get update && sudo apt-get install openjdk-17-jdk
-            sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
-            java -version
       - run:
           name: Download Dependencies
           command: 
