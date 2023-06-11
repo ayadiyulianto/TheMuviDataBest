@@ -23,8 +23,14 @@ jobs:
           distribution: oracle
           java-version: 17
           
-      - name: Build APK
-        run: bash ./gradlew assembleDebug --stacktrace
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        
+      - name: Chmod permissions
+        run: sudo chmod +x ./gradlew
+          
+      - name: Execute Gradle build
+        run: ./gradlew build
         
       - name: Upload APK
         uses: actions/upload-artifact@v3.1.2
