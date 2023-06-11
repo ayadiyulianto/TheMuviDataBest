@@ -1,3 +1,5 @@
+@file:Suppress("BooleanMethodIsAlwaysInverted")
+
 package com.ayadiyulianto.themuvidatabest.ui.moviedetail
 
 import androidx.lifecycle.LiveData
@@ -7,10 +9,9 @@ import androidx.lifecycle.asLiveData
 import com.ayadiyulianto.themuvidatabest.core.data.Resource
 import com.ayadiyulianto.themuvidatabest.core.domain.model.Movie
 import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 //@HiltViewModel
+@Suppress("BooleanMethodIsAlwaysInverted")
 class MovieDetailViewModel //@Inject constructor
     (private val tmdbUseCase: TmdbUseCase) :
     ViewModel() {

@@ -4,22 +4,20 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
-import com.ayadiyulianto.themuvidatabest.databinding.ActivityTvShowDetailBinding
+import com.ayadiyulianto.themuvidatabest.core.data.Resource
+import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShow
 import com.ayadiyulianto.themuvidatabest.core.util.Utils
+import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeStringToDateFormat
+import com.ayadiyulianto.themuvidatabest.databinding.ActivityTvShowDetailBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import androidx.recyclerview.widget.DividerItemDecoration
-import com.ayadiyulianto.themuvidatabest.core.data.Resource
-import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShow
-import com.ayadiyulianto.themuvidatabest.core.util.Utils.changeStringToDateFormat
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 //@AndroidEntryPoint

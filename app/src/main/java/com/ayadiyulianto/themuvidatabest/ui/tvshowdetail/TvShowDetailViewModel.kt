@@ -1,3 +1,5 @@
+@file:Suppress("BooleanMethodIsAlwaysInverted")
+
 package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import androidx.lifecycle.LiveData
@@ -8,8 +10,6 @@ import com.ayadiyulianto.themuvidatabest.core.data.Resource
 import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShow
 import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShowWithSeason
 import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 //@HiltViewModel
 class TvShowDetailViewModel //@Inject constructor

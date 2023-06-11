@@ -1,15 +1,18 @@
 package com.ayadiyulianto.themuvidatabest.core.util
 
-import com.ayadiyulianto.themuvidatabest.core.data.source.local.entity.*
+import com.ayadiyulianto.themuvidatabest.core.domain.model.Movie
 import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
+import com.ayadiyulianto.themuvidatabest.core.domain.model.Season
+import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShow
+import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShowWithSeason
 
 object DataDummy {
 
-    fun generateDummyMovie(): List<MovieEntity> {
-        val movies = ArrayList<MovieEntity>()
+    fun generateDummyMovie(): List<Movie> {
+        val movies = ArrayList<Movie>()
 
         movies.add(
-            MovieEntity(
+            Movie(
                 460465,
                 "Mortal Kombat",
                 "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
@@ -24,7 +27,7 @@ object DataDummy {
         )
 
         movies.add(
-            MovieEntity(
+            Movie(
                 399566,
                 "Godzilla vs. Kong",
                 "In a time when monsters walk the Earth, humanity’s fight for its future sets Godzilla and Kong on a " +
@@ -40,11 +43,11 @@ object DataDummy {
         return movies
     }
 
-    fun generateDummyTvShow(): List<TvShowEntity> {
-        val shows = ArrayList<TvShowEntity>()
+    fun generateDummyTvShow(): List<TvShow> {
+        val shows = ArrayList<TvShow>()
 
         shows.add(
-            TvShowEntity(
+            TvShow(
                 88396,
                 "The Falcon and the Winter Soldier",
                 "Following the events of “Avengers: Endgame”, the Falcon, Sam Wilson and the Winter Soldier, " +
@@ -58,7 +61,7 @@ object DataDummy {
         )
 
         shows.add(
-            TvShowEntity(
+            TvShow(
                 71712,
                 "The Good Doctor",
                 "A young surgeon with Savant syndrome is recruited into the surgical unit of a prestigious hospital. " +
@@ -74,11 +77,11 @@ object DataDummy {
         return shows
     }
 
-    fun generateDummyMovieDetail(): List<MovieEntity> {
-        val detailMovies = ArrayList<MovieEntity>()
+    fun generateDummyMovieDetail(): List<Movie> {
+        val detailMovies = ArrayList<Movie>()
 
         detailMovies.add(
-            MovieEntity(
+            Movie(
                 460465,
                 "Mortal Kombat",
                 "Washed-up MMA fighter Cole Young, unaware of his heritage, and hunted by Emperor Shang Tsung's best warrior, " +
@@ -101,7 +104,7 @@ object DataDummy {
         )
 
         detailMovies.add(
-            MovieEntity(
+            Movie(
                 527774,
                 "Raya and the Last Dragon",
                 "Long ago, in the fantasy world of Kumandra, humans and dragons lived together in harmony. " +
@@ -127,11 +130,11 @@ object DataDummy {
         return detailMovies
     }
 
-    fun generateDummyTvShowDetail(): List<TvShowEntity> {
-        val detailTvShows = ArrayList<TvShowEntity>()
+    fun generateDummyTvShowDetail(): List<TvShow> {
+        val detailTvShows = ArrayList<TvShow>()
 
         detailTvShows.add(
-            TvShowEntity(
+            TvShow(
                 88396,
                 "The Falcon and the Winter Soldier",
                 "Following the events of “Avengers: Endgame”, the Falcon, Sam Wilson and the Winter Soldier, " +
@@ -154,11 +157,11 @@ object DataDummy {
         return detailTvShows
     }
 
-    fun generateDummyTvShowWithSeasonDetail(): List<TvShowWithSeasonEntity> {
-        val seasonList = ArrayList<SeasonEntity>()
+    fun generateDummyTvShowWithSeasonDetail(): List<TvShowWithSeason> {
+        val seasonList = ArrayList<Season>()
 
         seasonList.add(
-            SeasonEntity(
+            Season(
                 156676,
                 88396,
                 "Season 1",
@@ -170,11 +173,11 @@ object DataDummy {
             )
         )
 
-        val detailTvShowWithSeasonEntity = ArrayList<TvShowWithSeasonEntity>()
+        val detailTvShowWithSeasonEntity = ArrayList<TvShowWithSeason>()
 
         detailTvShowWithSeasonEntity.add(
-            TvShowWithSeasonEntity(
-                TvShowEntity(
+            TvShowWithSeason(
+                TvShow(
                     88396,
                     "The Falcon and the Winter Soldier",
                     "Following the events of “Avengers: Endgame”, the Falcon, Sam Wilson and the Winter Soldier, " +

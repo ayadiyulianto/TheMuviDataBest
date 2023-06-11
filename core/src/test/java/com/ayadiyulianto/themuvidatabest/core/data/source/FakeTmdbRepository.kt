@@ -1,4 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.data.source
+package com.ayadiyulianto.themuvidatabest.core.data.source
 
 import com.ayadiyulianto.themuvidatabest.core.data.NetworkBoundResource
 import com.ayadiyulianto.themuvidatabest.core.data.Resource

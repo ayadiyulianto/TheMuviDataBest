@@ -1,3 +1,5 @@
+@file:Suppress("EmptyMethod")
+
 package com.ayadiyulianto.themuvidatabest.core.data
 
 import com.ayadiyulianto.themuvidatabest.core.data.source.remote.network.ApiResponse

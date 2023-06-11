@@ -1,5 +1,4 @@
-package com.ayadiyulianto.themuvidatabest.util
-
+package com.ayadiyulianto.themuvidatabest.favorite.util
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

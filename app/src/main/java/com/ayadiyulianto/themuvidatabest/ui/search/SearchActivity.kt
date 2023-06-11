@@ -1,19 +1,17 @@
 package com.ayadiyulianto.themuvidatabest.ui.search
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.core.data.Resource
 import com.ayadiyulianto.themuvidatabest.databinding.ActivitySearchBinding
 import com.mancj.materialsearchbar.MaterialSearchBar
-import dagger.hilt.android.AndroidEntryPoint
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 //@AndroidEntryPoint

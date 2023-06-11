@@ -6,7 +6,6 @@ import com.ayadiyulianto.themuvidatabest.core.di.networkModule
 import com.ayadiyulianto.themuvidatabest.core.di.repositoryModule
 import com.ayadiyulianto.themuvidatabest.di.useCaseModule
 import com.ayadiyulianto.themuvidatabest.di.viewModelModule
-import dagger.hilt.android.HiltAndroidApp
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

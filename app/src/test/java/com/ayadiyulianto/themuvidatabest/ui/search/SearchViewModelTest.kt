@@ -1,11 +1,14 @@
 package com.ayadiyulianto.themuvidatabest.ui.search
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.data.source.remote.entity.SearchEntity
-import com.ayadiyulianto.themuvidatabest.util.DataDummy
+import com.ayadiyulianto.themuvidatabest.core.data.Resource
+import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
+import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
+import com.ayadiyulianto.themuvidatabest.core.util.DataDummy
+import com.ayadiyulianto.themuvidatabest.util.MainDispatcherRule
+import com.ayadiyulianto.themuvidatabest.util.getOrAwaitValue
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -23,47 +26,50 @@ class SearchViewModelTest {
     private val dummyTrendings= DataDummy.generateDummySearch()
 
     @Mock
-    private lateinit var tmdbRepository: TmdbRepository
+    private lateinit var tmdbUseCase: TmdbUseCase
 
     @Mock
-    private lateinit var observer: Observer<List<SearchEntity>>
+    private lateinit var observer: Observer<Resource<List<SearchItem>>>
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Before
     fun setUp() {
-        viewModel = SearchViewModel(tmdbRepository)
+        viewModel = SearchViewModel(tmdbUseCase)
     }
 
     @Test
     fun getTrendings() {
-        val trendings = MutableLiveData<List<SearchEntity>>()
-        trendings.value = dummyTrendings
-        Mockito.`when`(tmdbRepository.getTrendings()).thenReturn(trendings)
+        val dummy = Resource.Success(dummyTrendings)
+        val trendings = flowOf(dummy)
+        Mockito.`when`(tmdbUseCase.getTrendings()).thenReturn(trendings)
 
-        val dataListShow = viewModel.getTrendings().value
-        Mockito.verify(tmdbRepository).getTrendings()
+        val dataListShow = viewModel.getTrendings().getOrAwaitValue()
+        Mockito.verify(tmdbUseCase).getTrendings()
         assertNotNull(dataListShow)
-        assertEquals(2, dataListShow?.size)
+        assertEquals(2, dataListShow.data?.size ?: 0)
 
         viewModel.getTrendings().observeForever(observer)
-        Mockito.verify(observer).onChanged(dummyTrendings)
+        Mockito.verify(observer).onChanged(dummy)
     }
 
     @Test
     fun getSearchResult() {
         val title = "dummy"
-        val results = MutableLiveData<List<SearchEntity>>()
-        results.value = dummyTrendings
-        Mockito.`when`(tmdbRepository.getSearchResult(title)).thenReturn(results)
+        val dummy = Resource.Success(dummyTrendings)
+        val results = flowOf(dummy)
+        Mockito.`when`(tmdbUseCase.getSearchResult(title)).thenReturn(results)
 
-        val searchResult = viewModel.getSearchResult(title).value
-        Mockito.verify(tmdbRepository).getSearchResult(title)
+        val searchResult = viewModel.getSearchResult(title).getOrAwaitValue()
+        Mockito.verify(tmdbUseCase).getSearchResult(title)
         assertNotNull(searchResult)
-        assertEquals(2, searchResult?.size)
+        assertEquals(2, searchResult.data?.size ?: 0)
 
         viewModel.getSearchResult(title).observeForever(observer)
-        Mockito.verify(observer).onChanged(dummyTrendings)
+        Mockito.verify(observer).onChanged(dummy)
     }
 }

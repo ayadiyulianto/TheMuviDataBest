@@ -1,6 +1,5 @@
 package com.ayadiyulianto.themuvidatabest.favorite
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +7,6 @@ import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.favorite.databinding.ActivityFavoriteBinding
 import com.ayadiyulianto.themuvidatabest.favorite.di.favoriteModule
 import com.ayadiyulianto.themuvidatabest.favorite.ui.main.FavoriteTabsAdapter
-import com.ayadiyulianto.themuvidatabest.ui.MainActivity
 import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.core.context.loadKoinModules
 

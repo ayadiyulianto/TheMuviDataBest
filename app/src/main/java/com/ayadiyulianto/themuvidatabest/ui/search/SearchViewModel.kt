@@ -6,8 +6,6 @@ import androidx.lifecycle.asLiveData
 import com.ayadiyulianto.themuvidatabest.core.data.Resource
 import com.ayadiyulianto.themuvidatabest.core.domain.model.SearchItem
 import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 //@HiltViewModel
 class SearchViewModel //@Inject constructor

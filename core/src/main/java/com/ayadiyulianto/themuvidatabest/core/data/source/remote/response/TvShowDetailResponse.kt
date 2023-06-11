@@ -1,3 +1,5 @@
+@file:Suppress("unused", "unused", "unused", "unused", "unused")
+
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
 import com.google.gson.annotations.SerializedName

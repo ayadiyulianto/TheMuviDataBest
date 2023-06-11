@@ -5,23 +5,22 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import com.ayadiyulianto.themuvidatabest.R
 import com.ayadiyulianto.themuvidatabest.databinding.ActivityMain2Binding
 import com.ayadiyulianto.themuvidatabest.ui.movies.MoviesFragment
-import com.ayadiyulianto.themuvidatabest.ui.tvshows.TvShowsFragment
 import com.ayadiyulianto.themuvidatabest.ui.search.SearchActivity
+import com.ayadiyulianto.themuvidatabest.ui.tvshows.TvShowsFragment
+import com.google.android.material.navigation.NavigationView
 
 //@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {

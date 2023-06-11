@@ -1,26 +1,5 @@
 package com.ayadiyulianto.themuvidatabest.core.di
 
-import android.content.Context
-import com.ayadiyulianto.themuvidatabest.core.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.core.data.source.local.LocalDataSource
-import com.ayadiyulianto.themuvidatabest.core.data.source.local.room.TmdbDatabase
-import com.ayadiyulianto.themuvidatabest.core.data.source.remote.RemoteDataSource
-import com.ayadiyulianto.themuvidatabest.core.data.source.remote.network.ApiService
-import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbInteractor
-import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
-import com.ayadiyulianto.themuvidatabest.core.util.AppExecutors
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
-import javax.inject.Singleton
-
 //@Module
 //@InstallIn(SingletonComponent::class)
 //object Injection {

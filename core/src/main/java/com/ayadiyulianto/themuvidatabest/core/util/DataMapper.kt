@@ -201,6 +201,7 @@ object DataMapper {
         )
     }
 
+
     fun TvShowWithSeasonEntity.toDomain() : TvShowWithSeason {
         return TvShowWithSeason(
             tvShow = tvShow.toDomain(),

@@ -1,12 +1,16 @@
 package com.ayadiyulianto.themuvidatabest.ui.tvshowdetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.ayadiyulianto.themuvidatabest.data.TmdbRepository
-import com.ayadiyulianto.themuvidatabest.data.source.local.entity.TvShowWithSeason
-import com.ayadiyulianto.themuvidatabest.util.DataDummy
-import com.ayadiyulianto.themuvidatabest.vo.Resource
+import com.ayadiyulianto.themuvidatabest.core.data.Resource
+import com.ayadiyulianto.themuvidatabest.core.domain.model.TvShowWithSeason
+import com.ayadiyulianto.themuvidatabest.core.domain.usecase.TmdbUseCase
+import com.ayadiyulianto.themuvidatabest.core.util.DataDummy
+import com.ayadiyulianto.themuvidatabest.util.MainDispatcherRule
+import com.ayadiyulianto.themuvidatabest.util.getOrAwaitValue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
@@ -27,46 +31,47 @@ class TvShowDetailViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Mock
-    private lateinit var tmdbRepository: TmdbRepository
+    private lateinit var tmdbUseCase: TmdbUseCase
 
     @Mock
     private lateinit var observer: Observer<Resource<TvShowWithSeason>>
 
     @Before
     fun setUp() {
-        viewModel = TvShowDetailViewModel(tmdbRepository)
-        viewModel.setSelectedTvShow(showId)
+        viewModel = TvShowDetailViewModel(tmdbUseCase)
+        viewModel.setSelectedTvShow(dummyDetailShow)
     }
 
     @Test
-    fun getTvShowDetailWithSeason(){
-        val expected = MutableLiveData<Resource<TvShowWithSeason>>()
-        expected.value = Resource.success(dummyTvShowWithSeason)
-        Mockito.`when`(tmdbRepository.getTvShowWithSeason(showId.toString())).thenReturn(expected)
+    fun getTvShowDetailWithSeason() = runTest{
+        val expected = flowOf(Resource.Success(dummyTvShowWithSeason))
+        Mockito.`when`(tmdbUseCase.getTvShowWithSeason(showId.toString())).thenReturn(expected)
 
-        viewModel.tvShowWithSeasonEntity.observeForever(observer)
-        Mockito.verify(observer).onChanged(expected.value)
+        viewModel.getTvShowSeasons(showId).observeForever(observer)
+        Mockito.verify(observer).onChanged(expected.first())
 
-        val expectedValue = expected.value
-        val actualValue = viewModel.tvShowWithSeasonEntity.value
+        val expectedValue = expected.first()
+        val actualValue = viewModel.getTvShowSeasons(showId).getOrAwaitValue()
 
         Assert.assertEquals(expectedValue, actualValue)
     }
 
     @Test
-    fun addFavoriteShow(){
-        val expected = MutableLiveData<Resource<TvShowWithSeason>>()
-        expected.value = Resource.success(dummyTvShowWithSeason)
-        Mockito.`when`(tmdbRepository.getTvShowWithSeason(showId.toString())).thenReturn(expected)
+    fun addFavoriteShow() = runTest{
+        val expected = flowOf(Resource.Success(dummyTvShowWithSeason))
+        Mockito.`when`(tmdbUseCase.getTvShowWithSeason(showId.toString())).thenReturn(expected)
 
         viewModel.setFavorite()
 
-        viewModel.tvShowWithSeasonEntity.observeForever(observer)
-        Mockito.verify(observer).onChanged(expected.value)
+        viewModel.getTvShowSeasons(showId).observeForever(observer)
+        Mockito.verify(observer).onChanged(expected.first())
 
-        val expectedValue = expected.value
-        val actualValue = viewModel.tvShowWithSeasonEntity.value
+        val expectedValue = expected.first()
+        val actualValue = viewModel.getTvShowSeasons(showId).getOrAwaitValue()
 
         Assert.assertEquals(expectedValue, actualValue)
     }

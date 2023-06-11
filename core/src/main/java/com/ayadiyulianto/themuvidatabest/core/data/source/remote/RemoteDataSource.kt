@@ -123,9 +123,5 @@ class RemoteDataSource(private val apiService: ApiService) {
         private const val API_KEY = BuildConfig.TMDB_API_KEY
         private const val language = "en-US"
 
-        fun getInstance(apiService: ApiService): RemoteDataSource =
-            instance ?: synchronized(this) {
-                instance ?: RemoteDataSource(apiService)
-            }
     }
 }
