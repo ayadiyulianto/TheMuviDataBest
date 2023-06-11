@@ -19,6 +19,8 @@ jobs:
           name: install jdk
           command: |
             java -version
+            sudo apt update
+            sudo apt upgrade
             apt-cache search openjdk
             sudo apt-get install openjdk-17-jdk
             update-alternatives --list java
