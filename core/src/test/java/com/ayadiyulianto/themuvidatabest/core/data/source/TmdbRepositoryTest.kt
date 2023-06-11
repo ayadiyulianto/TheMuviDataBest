@@ -3,7 +3,6 @@ package com.ayadiyulianto.themuvidatabest.core.data.source
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ayadiyulianto.themuvidatabest.core.data.Resource
 import com.ayadiyulianto.themuvidatabest.core.data.source.local.LocalDataSource
-import com.ayadiyulianto.themuvidatabest.core.data.source.local.entity.MovieEntity
 import com.ayadiyulianto.themuvidatabest.core.data.source.remote.RemoteDataSource
 import com.ayadiyulianto.themuvidatabest.core.util.AppExecutors
 import com.ayadiyulianto.themuvidatabest.core.util.DataDummy

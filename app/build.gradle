@@ -43,6 +43,17 @@ android {
     }
     namespace 'com.ayadiyulianto.themuvidatabest'
     dynamicFeatures = [':favorite']
+
+    lintOptions {
+        disable 'TypographyFractions','TypographyQuotes'
+        enable 'RtlHardcoded','RtlCompat', 'RtlEnabled'
+        checkOnly 'NewApi', 'InlinedApi'
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        baseline file("lint-baseline.xml")
+        lintConfig = file("$rootDir/glide-notif.xml")
+    }
 }
 
 apply from: '../shared_dependencies.gradle'

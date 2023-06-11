@@ -1,4 +1,4 @@
-@file:Suppress("unused", "unused", "unused", "unused", "unused")
+@file:Suppress("unused", "unused", "unused", "unused")
 
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 

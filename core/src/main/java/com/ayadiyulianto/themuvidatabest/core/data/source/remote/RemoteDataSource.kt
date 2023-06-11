@@ -118,8 +118,6 @@ class RemoteDataSource(private val apiService: ApiService) {
     }
 
     companion object {
-        @Volatile
-        private var instance: RemoteDataSource? = null
         private const val API_KEY = BuildConfig.TMDB_API_KEY
         private const val language = "en-US"
 
