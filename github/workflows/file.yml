@@ -1,0 +1,58 @@
+# Workflow name
+name: Build
+on:
+# When it will be triggered
+# And in which branch
+  pull_request:
+  push:
+    branches:
+      - main
+# Where will they run
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+      ## Checkout our repository ###
+      - name: Checkout
+        uses: actions/checkout@v3.5.3
+
+      - name: Set up our JDK environment
+        uses: actions/setup-java@v3.11.0
+        with:
+          java-version: 17
+          
+      - name: Build APK
+        run: bash ./gradlew assembleDebug --stacktrace
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: apk
+          path: app/build/outputs/apk/debug/app-debug.apk 
+          
+      ## Build all our Build Types at once ##
+#       - name: Build all artifacts
+#         id: buildAllApks
+#         uses: eskatos/gradle-command-action@v1.3.3
+#         with:
+#           gradle-version: current
+#           wrapper-cache-enabled: true
+#           dependencies-cache-enabled: true
+#           configuration-cache-enabled: true
+#           arguments: assembleRelease
+
+      - name: Run Kotlin Linter
+        run: ./gradlew ktlintStagingDebugCheck
+
+      - name: Run Unit Tests
+        run: ./gradlew testStagingDebugUnitTest
+        
+#       - name: Build APK
+#         run: bash ./gradlew assembleDebug --stacktrace
+
+#       - name: Upload our APK
+#         uses: actions/upload-artifact@v3.1.2
+#         with:
+#           name: Release artifact
+#           path: app/
