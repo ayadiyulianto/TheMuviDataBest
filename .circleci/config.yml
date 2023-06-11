@@ -16,8 +16,16 @@ jobs:
       - android/restore-build-cache:
           cache-prefix: build-v1
       - run:
-          name: install jdk
+          name: install openjdk-17
           command: |
+            java -version
+            sudo apt update
+            sudo apt upgrade
+            apt-cache search openjdk
+            sudo apt-get install openjdk-17-jdk
+            update-alternatives --list java
+            sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
             java -version
       #- android/change-java-version:
       #    java-version: 17
@@ -26,15 +34,13 @@ jobs:
           command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
-          command: 
-            ./gradlew androidDependencies
-      - run:
-          name: Check java version
-          command:
+          command: |
             java -version
+            ./gradlew androidDependencies
       - run:
           name: Run Build
           command:
+            java -version
             ./gradlew build
       - android/save-gradle-cache:
           cache-prefix: gradle-v1
