@@ -2,7 +2,7 @@
 
 Dicoding - Submission Android Expert
 
-[![ayadiyulianto](https://circleci.com/gh/ayadiyulianto/TheMuviDataBest.svg?style=shield)](https://circleci.com/gh/ayadiyulianto/TheMuviDataBest)
+![TheMuviDataBest](https://github.com/ayadiyulianto/TheMuviDataBest/actions/workflows/main.yml/badge.svg)
 
 ## Skenario Testing
 
