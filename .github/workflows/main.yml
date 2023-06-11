@@ -20,6 +20,7 @@ jobs:
       - name: Set up our JDK environment
         uses: actions/setup-java@v3.11.0
         with:
+          distribution: oracle
           java-version: 17
           
       - name: Build APK
