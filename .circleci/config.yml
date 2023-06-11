@@ -19,6 +19,7 @@ jobs:
           name: install jdk
           command: |
             java -version
+            apt-cache search openjdk
             sudo apt-get install openjdk-17-jdk
             update-alternatives --list java
             sudo update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
