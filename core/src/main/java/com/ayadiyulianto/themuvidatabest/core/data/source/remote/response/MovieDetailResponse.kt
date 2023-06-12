@@ -1,7 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class MovieDetailResponse(
 
     @field:SerializedName("original_language")
@@ -80,6 +82,7 @@ data class MovieDetailResponse(
     val videos: VideoResults? = null
 )
 
+@Keep
 data class ProductionCompaniesItem(
 
     @field:SerializedName("logo_path")

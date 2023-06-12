@@ -1,7 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class DiscoverMovieResponse(
 
 	@field:SerializedName("page")
@@ -17,6 +19,7 @@ data class DiscoverMovieResponse(
 	val totalResults: Int
 )
 
+@Keep
 data class ResultsItemMovie(
 
 	@field:SerializedName("overview")

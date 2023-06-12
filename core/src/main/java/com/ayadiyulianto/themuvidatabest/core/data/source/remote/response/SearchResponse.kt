@@ -1,7 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class SearchResponse(
 
     @field:SerializedName("page")
@@ -17,6 +19,7 @@ data class SearchResponse(
     val totalResults: Int? = null
 )
 
+@Keep
 data class SearchResultsItem(
 
     @field:SerializedName("id")

@@ -1,7 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class DiscoverTvShowResponse(
 
 	@field:SerializedName("page")
@@ -17,6 +19,7 @@ data class DiscoverTvShowResponse(
 	val totalResults: Int
 )
 
+@Keep
 data class ResultsItemTvShow(
 
 	@field:SerializedName("first_air_date")

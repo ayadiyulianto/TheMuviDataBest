@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import com.ayadiyulianto.themuvidatabest.core.data.source.local.entity.MovieEntity
 import com.ayadiyulianto.themuvidatabest.core.data.source.local.entity.SeasonEntity
 import com.ayadiyulianto.themuvidatabest.core.data.source.local.entity.TvShowEntity
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 
 @Database(
     entities = [MovieEntity::class, TvShowEntity::class, SeasonEntity::class],
@@ -23,15 +25,15 @@ abstract class TmdbDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): TmdbDatabase =
             INSTANCE ?: synchronized(this) {
-//                val passphrase: ByteArray = SQLiteDatabase.getBytes("ayadiyulianto".toCharArray())
-//                val factory = SupportFactory(passphrase)
+                val passphrase: ByteArray = SQLiteDatabase.getBytes("ayadiyulianto".toCharArray())
+                val factory = SupportFactory(passphrase)
                 Room.databaseBuilder(
                     context.applicationContext,
                     TmdbDatabase::class.java,
                     "Tmdb.db"
                 )
                     .fallbackToDestructiveMigration()
-//                    .openHelperFactory(factory)
+                    .openHelperFactory(factory)
                     .build()
                     .apply {
                         INSTANCE = this

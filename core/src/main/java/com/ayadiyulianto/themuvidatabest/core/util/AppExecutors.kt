@@ -8,8 +8,7 @@ class AppExecutors @VisibleForTesting constructor(
     private val diskIO: Executor
 ) {
 
-    companion object {
-    }
+    companion object;
 
     constructor() : this(
         Executors.newSingleThreadExecutor()

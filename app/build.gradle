@@ -21,13 +21,18 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -60,6 +65,7 @@ apply from: '../shared_dependencies.gradle'
 
 dependencies {
     implementation project(":core")
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.11'
 }
 
 // Allow references to generated code

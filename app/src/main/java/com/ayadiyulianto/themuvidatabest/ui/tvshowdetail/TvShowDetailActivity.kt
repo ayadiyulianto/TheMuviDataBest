@@ -169,14 +169,14 @@ class TvShowDetailActivity : AppCompatActivity() {
     }
 
     private fun setYTPlayer(videoId: String) {
-        val youTubePlayerView = binding.contentTvShowDetail.ytPlayerView
-        lifecycle.addObserver(youTubePlayerView)
-
-        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: YouTubePlayer) {
-                youTubePlayer.cueVideo(videoId, 0f)
-            }
-        })
+//        val youTubePlayerView = binding.contentTvShowDetail.ytPlayerView
+//        lifecycle.addObserver(youTubePlayerView)
+//
+//        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+//            override fun onReady(youTubePlayer: YouTubePlayer) {
+//                youTubePlayer.cueVideo(videoId, 0f)
+//            }
+//        })
     }
 
     companion object {

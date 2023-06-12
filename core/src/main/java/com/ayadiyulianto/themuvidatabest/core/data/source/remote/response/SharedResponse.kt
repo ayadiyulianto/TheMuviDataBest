@@ -1,7 +1,9 @@
 package com.ayadiyulianto.themuvidatabest.core.data.source.remote.response
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class SpokenLanguagesItem(
 
     @field:SerializedName("name")
@@ -14,6 +16,7 @@ data class SpokenLanguagesItem(
     val englishName: String? = null
 )
 
+@Keep
 data class ProductionCountriesItem(
 
     @field:SerializedName("iso_3166_1")
@@ -23,6 +26,7 @@ data class ProductionCountriesItem(
     val name: String? = null
 )
 
+@Keep
 data class GenresItem(
 
     @field:SerializedName("name")
@@ -32,11 +36,13 @@ data class GenresItem(
     val id: Int? = null
 )
 
+@Keep
 data class VideoResults(
     @field:SerializedName("results")
     val results: List<VideosItem>? = null,
 )
 
+@Keep
 data class VideosItem(
     @field:SerializedName("name")
     val name: String? = null,
