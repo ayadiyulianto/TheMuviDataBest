@@ -59,6 +59,7 @@ android {
         baseline file("lint-baseline.xml")
         lintConfig = file("$rootDir/glide-notif.xml")
     }
+    buildToolsVersion '33.0.2'
 }
 
 apply from: '../shared_dependencies.gradle'
